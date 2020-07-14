@@ -21,7 +21,7 @@ class MyApp1 extends StatelessWidget {
       initialRoute: 'home',
       routes: {
         // 'home': (BuildContext context) => HomePage(),
-        'home': (BuildContext context) => MainPage(),
+        'home': (BuildContext context) => HomePage(),
         //MainPage()
       },
     );
