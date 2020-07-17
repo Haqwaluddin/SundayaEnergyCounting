@@ -22,7 +22,6 @@ import 'package:screen/screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-
 String DataStop = "20200428T110000";
 String DataStop1 = ""; //20200414T160000
 var GeserStatus = false;
@@ -66,8 +65,6 @@ int _downCounter = 0;
 int _upCounter = 0;
 double x = 0.0;
 double y = 0.0;
-
-
 
 var blue = "#059AFF";
 
@@ -120,18 +117,28 @@ var dataCounterApi = 0;
 
 String timer = "menit";
 
-String timeDisplayStart, timeDisplayEnd, timestartweek,timestartweek1,timeendweek,timeweek, timestartday,timeendday,timeday, timestarthour,timeendhour,timehour,timehour1;
+String timeDisplayStart,
+    timeDisplayEnd,
+    timestartweek,
+    timestartweek1,
+    timeendweek,
+    timeweek,
+    timestartday,
+    timeendday,
+    timeday,
+    timestarthour,
+    timeendhour,
+    timehour,
+    timehour1;
 
 bool statusMinutes = false;
 
 var maxGrap = 0.0;
 
-
 //-------//
 var dt = DateTime.now();
 var newDt = DateFormat.yMMMEd().format(dt);
 var dtweek = DateFormat.yMMMM().format(dt);
-
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key}) : super(key: key);
@@ -141,6 +148,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int count = 0;
   var isLoading = false;
   int a = 0;
   int GestureLeft, GestureRight, ValueData, ValueStart;
@@ -149,13 +157,18 @@ class _HomePageState extends State<HomePage> {
     counter++;
   }
 
+   void incrementCounter() {
+    setState(() {
+      count++;
+    });
+  }
+
   void buildText(String logFile) {
     buildTextLog(logFile);
     setState(() {});
   }
 
   Widget buildTextLog(String logFile) {
-
     return Text(logFile);
   }
 
@@ -168,7 +181,6 @@ class _HomePageState extends State<HomePage> {
             borderRadius: new BorderRadius.circular(10.0),
             side: BorderSide(color: Colors.white)),
         onPressed: () async {
-
           String db = buttonText;
           if (buttonText == "minutes") {
             changeDataPeriodic = 0;
@@ -177,16 +189,13 @@ class _HomePageState extends State<HomePage> {
 
           if (buttonText == "hourly") {
             changeDataPeriodic = 1;
-
           }
 
           if (buttonText == "daily") {
             changeDataPeriodic = 2;
-
           }
 
           changeQuery1("", "");
-
         });
   }
 
@@ -194,13 +203,12 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-
       backgroundColor: Colors.white,
       body: !stateData
           ? Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Center(   
+                Center(
                   // child: CircularProgressIndicator(),
                   child: SpinKitWave(
                     color: Colors.blue,
@@ -219,1375 +227,1343 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             )
-          : SafeArea(child: Stack(
-            children: <Widget>[
-              Column(
-                    children: <Widget>[
-                      Container(
-                        height: SizeConfig.blockSizeVertical*30,
-                          child: Center(
-                        child: _buildEmployeeListView(),
-                      )),
-                    Container(
-                      height: SizeConfig.blockSizeVertical*1,
-                    ), 
-
-                    Container(
-                      child: selectTime(dataPeriodic[changeDataPeriodic]),
-                    ),
-
-
-                    ],
-                  ),
-                Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
+          : SafeArea(
+              child: Stack(
                 children: <Widget>[
                   Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          Center(
-                            child: Card(
-                              child: ListTile(
-                                leading: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Text("Source"),
-                                    Text(arrayDB[changeDataPeriodic]),
-                                    // selectTime(arrayDB[changeDataPeriodic]),
-                                  ],
-                                ),
-                                title: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                  children: <Widget>[
-                                    Text("Start"),
-                                    Text("End"),
-                                  ],
-                                ),
-                                subtitle: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                  children: <Widget>[
-                                    Text(
-                                      timeDisplayStart.toString(),
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                    Text(
-                                      timeDisplayEnd.toString(),
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                  ],
+                    children: <Widget>[
+                      Container(
+                          height: SizeConfig.blockSizeVertical * 30,
+                          child: Center(
+                            child: _buildEmployeeListView(),
+                          )),
+                      Container(
+                        height: SizeConfig.blockSizeVertical * 1,
+                      ),
+                      Column(
+                          children: [
+                              if (timestartweek != null) ...[
+                                Container(
+                                  height: SizeConfig.blockSizeVertical*15,
+                                  child: selectTime(dataPeriodic[changeDataPeriodic]),
+                                   ),
+                              ] else ...[
+                               Container(
+                                 height: SizeConfig.blockSizeVertical*15,
+                                 child: nulldivider(),
+                                   ),
+                              ],
+                          ],
+                      ),
+                          
+                      // Container(
+                        // child: selectTime(dataPeriodic[changeDataPeriodic]),
+                      // ),
+                    ],
+                  ),
+                  Container(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            Center(
+                              child: Card(
+                                child: ListTile(
+                                  leading: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text("Source"),
+                                      Text(arrayDB[changeDataPeriodic]),
+                                      // selectTime(arrayDB[changeDataPeriodic]),
+                                    ],
+                                  ),
+                                  title: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: <Widget>[
+                                      Text("Start"),
+                                      Text("End"),
+                                    ],
+                                  ),
+                                  subtitle: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: <Widget>[
+                                      Text(
+                                        timeDisplayStart.toString(),
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                      Text(
+                                        timeDisplayEnd.toString(),
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    buildNavigator(statusMinutes),
-                    ],
+                          ],
+                        ),
+                        buildNavigator(statusMinutes),
+                      ],
+                    ),
                   ),
+                ],
+              ),
             ),
-            ],
-          ),
-          
-          ),
-
     );
   }
 
-selectTime(String periodic){
-
-  if (periodic == "Week"&&AddManualLeft<=2) {
-    // timestampday();
-    // if (timestartweek.toString()==null){
-    //   timestartweek=" ? ";
-    //   print("Test Null : "+timestartweek.toString());
-    // }
-    return 
-                Column(
-                  children: <Widget>[
-                    Row(children: <Widget>[
-                      Container(
-                        width: SizeConfig.blockSizeHorizontal*23.5,
-                      ),
-                              Column(
-                                children: <Widget>[
-                                  Text(timestartweek.toString()),
-                                  Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                                ],
-                              ),
-
-
-                            Container(
-                              width: SizeConfig.blockSizeHorizontal*66.8,
-                            ),
-
-                             Column(
-                               children: <Widget>[
-                                 Text(timeendweek.toString()),
-                                 Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                               ],
-                             ),
-                                                       
-                    ],
+  selectTime(String periodic) {
+    if (periodic == "Week" && AddManualLeft <= 2) {
+      return Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 23.5,
+              ),
+              Column(
+                children: <Widget>[
+                  Text(timestartweek.toString() != null
+                      ? timestartweek = timestartweek
+                      : timestartweek = "?"),
+                  Container(
+                    color: Colors.black,
+                    child: VerticalDivider(
+                      width: SizeConfig.blockSizeHorizontal * 0.5,
+                      indent: 10,
+                      endIndent: 15,
                     ),
-                 
-
-                 Column(
-             children: <Widget>[
-               Container(
-                 child: Divider(color: Colors.black,
-                 height: SizeConfig.blockSizeVertical*0.2,
-                  thickness: SizeConfig.blockSizeHorizontal*0.5,
-                  indent: SizeConfig.blockSizeHorizontal*25,
-                  endIndent: SizeConfig.blockSizeVertical*2,
                   ),
-                ),
-
-                 Row(
-                   children: <Widget>[
-                    Container(
-                      width: SizeConfig.blockSizeHorizontal*50,
-                    ), 
-                    Text(
-                                timeweek.toString(),
-                                // DateTime.now().toString(),
-                                style: GoogleFonts.openSans(
-                                  fontSize: 20,
-                                ),
-                                textScaleFactor: 1,
-                              ),
-
-                              // Text(timeweek.toString())
-                   ],
-                 ), 
-             ],
-         ),
-          ],
-                );
-  }
-  else if(periodic == "Week"&&AddManualLeft>4){
-   return 
-                Column(
-                  children: <Widget>[
-                    Row(children: <Widget>[
-                      Container(
-                        width: SizeConfig.blockSizeHorizontal*23.5,
-                      ),
-                              Column(
-                                children: <Widget>[
-                                  Text(timestartweek.toString()),
-                                  Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                                ],
-                              ),
-                            Container(
-                              width: SizeConfig.blockSizeHorizontal*20.3,
-                            ),
-
-                             Column(
-                               children: <Widget>[
-                                 Text("??"),
-                                 Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                               ],
-                             ),
-                            Container(
-                              width: SizeConfig.blockSizeHorizontal*20.3,
-                            ),
-
-                             Column(
-                               children: <Widget>[
-                                 Text("??"),
-                                 Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                               ],
-                             ),
-                            Container(
-                              width: SizeConfig.blockSizeHorizontal*20.3,
-                            ),
-
-                             Column(
-                               children: <Widget>[
-                                 Text(timeendweek.toString()),
-                                 Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                               ],
-                             ),
-                                                       
-                    ],
+                ],
+              ),
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 66.8,
+              ),
+              Column(
+                children: <Widget>[
+                  Text(timeendweek.toString()),
+                  Container(
+                    color: Colors.black,
+                    child: VerticalDivider(
+                      width: SizeConfig.blockSizeHorizontal * 0.5,
+                      indent: 10,
+                      endIndent: 15,
                     ),
-                 
-
-                 Column(
-             children: <Widget>[
-               Container(
-                 child: Divider(color: Colors.black,
-                 height: SizeConfig.blockSizeVertical*0.2,
-                  thickness: SizeConfig.blockSizeHorizontal*0.5,
-                  indent: SizeConfig.blockSizeHorizontal*25,
-                  endIndent: SizeConfig.blockSizeVertical*2,
                   ),
+                ],
+              ),
+            ],
+          ),
+          Column(
+            children: <Widget>[
+              Container(
+                child: Divider(
+                  color: Colors.black,
+                  height: SizeConfig.blockSizeVertical * 0.2,
+                  thickness: SizeConfig.blockSizeHorizontal * 0.5,
+                  indent: SizeConfig.blockSizeHorizontal * 25,
+                  endIndent: SizeConfig.blockSizeVertical * 2,
                 ),
-
-                 Row(
-                   children: <Widget>[
-                    Container(
-                      width: SizeConfig.blockSizeHorizontal*50,
-                    ), 
-                    Text(
-                                timeweek.toString(),
-                                // DateTime.now().toString(),
-                                style: GoogleFonts.openSans(
-                                  fontSize: 20,
-                                ),
-                                textScaleFactor: 1,
-                              ),
-
-                              // Text(timeweek.toString())
-                   ],
-                 ), 
-             ],
-         ),
-          ],
-                );    
-
-  }
-  else if(periodic == "Week"&&AddManualLeft>2){
-   return 
-                Column(
-                  children: <Widget>[
-                    Row(children: <Widget>[
-                      Container(
-                        width: SizeConfig.blockSizeHorizontal*23.5,
-                      ),
-                              Column(
-                                children: <Widget>[
-                                  Text(timestartweek.toString()),
-                                  Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                                ],
-                              ),
-                            Container(
-                              width: SizeConfig.blockSizeHorizontal*31.9,
-                            ),
-
-                             Column(
-                               children: <Widget>[
-                                 Text("??"),
-                                 Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                               ],
-                             ),
-
-                            Container(
-                              width: SizeConfig.blockSizeHorizontal*31.9,
-                            ),
-
-                             Column(
-                               children: <Widget>[
-                                 Text(timeendweek.toString()),
-                                 Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                               ],
-                             ),
-                                                       
-                    ],
+              ),
+              Row(
+                children: <Widget>[
+                  Container(
+                    width: SizeConfig.blockSizeHorizontal * 50,
+                  ),
+                  Text(
+                    timeweek.toString(),
+                    // DateTime.now().toString(),
+                    style: GoogleFonts.openSans(
+                      fontSize: 20,
                     ),
-                 
-
-                 Column(
-             children: <Widget>[
-               Container(
-                 child: Divider(color: Colors.black,
-                 height: SizeConfig.blockSizeVertical*0.2,
-                  thickness: SizeConfig.blockSizeHorizontal*0.5,
-                  indent: SizeConfig.blockSizeHorizontal*25,
-                  endIndent: SizeConfig.blockSizeVertical*2,
+                    textScaleFactor: 1,
                   ),
-                ),
 
-                 Row(
-                   children: <Widget>[
-                    Container(
-                      width: SizeConfig.blockSizeHorizontal*50,
-                    ), 
-                    Text(
-                                timeweek.toString(),
-                                // DateTime.now().toString(),
-                                style: GoogleFonts.openSans(
-                                  fontSize: 20,
-                                ),
-                                textScaleFactor: 1,
-                              ),
-
-                              // Text(timeweek.toString())
-                   ],
-                 ), 
-             ],
-         ),
-          ],
-                );    
-
-  }
-  if (periodic == "Day"&&AddManualLeft<=2) {
-    // timestampday();
-    return 
-                Column(
-                  children: <Widget>[
-                    Row(children: <Widget>[
-                      Container(
-                        width: SizeConfig.blockSizeHorizontal*23.5,
-                      ),
-                              Column(
-                                children: <Widget>[
-                                  Text(timestartday.toString()),
-                                  Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                                ],
-                              ),
-
-
-                            Container(
-                              width: SizeConfig.blockSizeHorizontal*66.8,
-                            ),
-
-                             Column(
-                               children: <Widget>[
-                                 Text(timeendday.toString()),
-                                 Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                               ],
-                             ),
-                                                       
-                    ],
+                  // Text(timeweek.toString())
+                ],
+              ),
+            ],
+          ),
+        ],
+      );
+    } else if (periodic == "Week" && AddManualLeft > 4) {
+      return Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 23.5,
+              ),
+              Column(
+                children: <Widget>[
+                  Text(timestartweek.toString()),
+                  Container(
+                    color: Colors.black,
+                    child: VerticalDivider(
+                      width: SizeConfig.blockSizeHorizontal * 0.5,
+                      indent: 10,
+                      endIndent: 15,
                     ),
-                 
-
-                 Column(
-             children: <Widget>[
-               Container(
-                 child: Divider(color: Colors.black,
-                 height: SizeConfig.blockSizeVertical*0.2,
-                  thickness: SizeConfig.blockSizeHorizontal*0.5,
-                  indent: SizeConfig.blockSizeHorizontal*25,
-                  endIndent: SizeConfig.blockSizeVertical*2,
                   ),
-                ),
-
-                 Row(
-                   children: <Widget>[
-                    Container(
-                      width: SizeConfig.blockSizeHorizontal*50,
-                    ), 
-                    Text(
-                                timeday.toString(),
-                                // DateTime.now().toString(),
-                                style: GoogleFonts.openSans(
-                                  fontSize: 20,
-                                ),
-                                textScaleFactor: 1,
-                              ),
-
-                              // Text(timeweek.toString())
-                   ],
-                 ), 
-             ],
-         ),
-          ],
-                );
-  }
-  else if(periodic == "Day"&&AddManualLeft>4){
-   return 
-                Column(
-                  children: <Widget>[
-                    Row(children: <Widget>[
-                      Container(
-                        width: SizeConfig.blockSizeHorizontal*23.5,
-                      ),
-                              Column(
-                                children: <Widget>[
-                                  Text(timestartday.toString()),
-                                  Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                                ],
-                              ),
-                            Container(
-                              width: SizeConfig.blockSizeHorizontal*20.3,
-                            ),
-
-                             Column(
-                               children: <Widget>[
-                                 Text("??"),
-                                 Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                               ],
-                             ),
-                            Container(
-                              width: SizeConfig.blockSizeHorizontal*20.3,
-                            ),
-
-                             Column(
-                               children: <Widget>[
-                                 Text("??"),
-                                 Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                               ],
-                             ),
-                            Container(
-                              width: SizeConfig.blockSizeHorizontal*20.3,
-                            ),
-
-                             Column(
-                               children: <Widget>[
-                                 Text(timeendday.toString()),
-                                 Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                               ],
-                             ),
-                                                       
-                    ],
+                ],
+              ),
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 20.3,
+              ),
+              Column(
+                children: <Widget>[
+                  Text("??"),
+                  Container(
+                    color: Colors.black,
+                    child: VerticalDivider(
+                      width: SizeConfig.blockSizeHorizontal * 0.5,
+                      indent: 10,
+                      endIndent: 15,
                     ),
-                 
-
-                 Column(
-             children: <Widget>[
-               Container(
-                 child: Divider(color: Colors.black,
-                 height: SizeConfig.blockSizeVertical*0.2,
-                  thickness: SizeConfig.blockSizeHorizontal*0.5,
-                  indent: SizeConfig.blockSizeHorizontal*25,
-                  endIndent: SizeConfig.blockSizeVertical*2,
                   ),
-                ),
-
-                 Row(
-                   children: <Widget>[
-                    Container(
-                      width: SizeConfig.blockSizeHorizontal*50,
-                    ), 
-                    Text(
-                                timeday.toString(),
-                                // DateTime.now().toString(),
-                                style: GoogleFonts.openSans(
-                                  fontSize: 20,
-                                ),
-                                textScaleFactor: 1,
-                              ),
-
-                              // Text(timeweek.toString())
-                   ],
-                 ), 
-             ],
-         ),
-          ],
-                );    
-
-  }
-  else if(periodic == "Day"&&AddManualLeft>2){
-   return 
-                Column(
-                  children: <Widget>[
-                    Row(children: <Widget>[
-                      Container(
-                        width: SizeConfig.blockSizeHorizontal*23.5,
-                      ),
-                              Column(
-                                children: <Widget>[
-                                  Text(timestartday.toString()),
-                                  Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                                ],
-                              ),
-                            Container(
-                              width: SizeConfig.blockSizeHorizontal*31.9,
-                            ),
-
-                             Column(
-                               children: <Widget>[
-                                 Text("??"),
-                                 Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                               ],
-                             ),
-
-                            Container(
-                              width: SizeConfig.blockSizeHorizontal*31.9,
-                            ),
-
-                             Column(
-                               children: <Widget>[
-                                 Text(timeendday.toString()),
-                                 Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                               ],
-                             ),
-                                                       
-                    ],
+                ],
+              ),
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 20.3,
+              ),
+              Column(
+                children: <Widget>[
+                  Text("??"),
+                  Container(
+                    color: Colors.black,
+                    child: VerticalDivider(
+                      width: SizeConfig.blockSizeHorizontal * 0.5,
+                      indent: 10,
+                      endIndent: 15,
                     ),
-                 
-
-                 Column(
-             children: <Widget>[
-               Container(
-                 child: Divider(color: Colors.black,
-                 height: SizeConfig.blockSizeVertical*0.2,
-                  thickness: SizeConfig.blockSizeHorizontal*0.5,
-                  indent: SizeConfig.blockSizeHorizontal*25,
-                  endIndent: SizeConfig.blockSizeVertical*2,
                   ),
-                ),
-
-                 Row(
-                   children: <Widget>[
-                    Container(
-                      width: SizeConfig.blockSizeHorizontal*50,
-                    ), 
-                    Text(
-                                timeday.toString(),
-                                // DateTime.now().toString(),
-                                style: GoogleFonts.openSans(
-                                  fontSize: 20,
-                                ),
-                                textScaleFactor: 1,
-                              ),
-
-                              // Text(timeweek.toString())
-                   ],
-                 ), 
-             ],
-         ),
-          ],
-                );    
-
-  }
-
-  if (periodic == "Hour"&&AddManualLeft<=2) {
-    // timestampday();
-    return 
-                Column(
-                  children: <Widget>[
-                    Row(children: <Widget>[
-                      Container(
-                        width: SizeConfig.blockSizeHorizontal*23.5,
-                      ),
-                              Column(
-                                children: <Widget>[
-                                  Text(timestarthour.toString()),
-                                  Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                                ],
-                              ),
-
-
-                            Container(
-                              width: SizeConfig.blockSizeHorizontal*66.8,
-                            ),
-
-                             Column(
-                               children: <Widget>[
-                                 Text(timeendhour.toString()),
-                                 Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                               ],
-                             ),
-                                                       
-                    ],
+                ],
+              ),
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 20.3,
+              ),
+              Column(
+                children: <Widget>[
+                  Text(timeendweek.toString()),
+                  Container(
+                    color: Colors.black,
+                    child: VerticalDivider(
+                      width: SizeConfig.blockSizeHorizontal * 0.5,
+                      indent: 10,
+                      endIndent: 15,
                     ),
-                 
-
-                 Column(
-             children: <Widget>[
-               Container(
-                 child: Divider(color: Colors.black,
-                 height: SizeConfig.blockSizeVertical*0.2,
-                  thickness: SizeConfig.blockSizeHorizontal*0.5,
-                  indent: SizeConfig.blockSizeHorizontal*25,
-                  endIndent: SizeConfig.blockSizeVertical*2,
                   ),
+                ],
+              ),
+            ],
+          ),
+          Column(
+            children: <Widget>[
+              Container(
+                child: Divider(
+                  color: Colors.black,
+                  height: SizeConfig.blockSizeVertical * 0.2,
+                  thickness: SizeConfig.blockSizeHorizontal * 0.5,
+                  indent: SizeConfig.blockSizeHorizontal * 25,
+                  endIndent: SizeConfig.blockSizeVertical * 2,
                 ),
-
-                 Row(
-                   children: <Widget>[
-                    Container(
-                      width: SizeConfig.blockSizeHorizontal*50,
-                    ), 
-                    Text(
-                                timehour1.toString(),
-                                // DateTime.now().toString(),
-                                style: GoogleFonts.openSans(
-                                  fontSize: 20,
-                                ),
-                                textScaleFactor: 1,
-                              ),
-
-                              // Text(timeweek.toString())
-                   ],
-                 ), 
-             ],
-         ),
-          ],
-                );
-  }
-  else if(periodic == "Hour"&&AddManualLeft>4){
-   return 
-                Column(
-                  children: <Widget>[
-                    Row(children: <Widget>[
-                      Container(
-                        width: SizeConfig.blockSizeHorizontal*23.5,
-                      ),
-                              Column(
-                                children: <Widget>[
-                                  Text(timestarthour.toString()),
-                                  Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                                ],
-                              ),
-                            Container(
-                              width: SizeConfig.blockSizeHorizontal*20.3,
-                            ),
-
-                             Column(
-                               children: <Widget>[
-                                 Text("??"),
-                                 Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                               ],
-                             ),
-                            Container(
-                              width: SizeConfig.blockSizeHorizontal*20.3,
-                            ),
-
-                             Column(
-                               children: <Widget>[
-                                 Text("??"),
-                                 Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                               ],
-                             ),
-                            Container(
-                              width: SizeConfig.blockSizeHorizontal*20.3,
-                            ),
-
-                             Column(
-                               children: <Widget>[
-                                 Text(timeendday.toString()),
-                                 Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                               ],
-                             ),
-                                                       
-                    ],
+              ),
+              Row(
+                children: <Widget>[
+                  Container(
+                    width: SizeConfig.blockSizeHorizontal * 50,
+                  ),
+                  Text(
+                    timeweek.toString(),
+                    // DateTime.now().toString(),
+                    style: GoogleFonts.openSans(
+                      fontSize: 20,
                     ),
-                 
-
-                 Column(
-             children: <Widget>[
-               Container(
-                 child: Divider(color: Colors.black,
-                 height: SizeConfig.blockSizeVertical*0.2,
-                  thickness: SizeConfig.blockSizeHorizontal*0.5,
-                  indent: SizeConfig.blockSizeHorizontal*25,
-                  endIndent: SizeConfig.blockSizeVertical*2,
+                    textScaleFactor: 1,
                   ),
-                ),
 
-                 Row(
-                   children: <Widget>[
-                    Container(
-                      width: SizeConfig.blockSizeHorizontal*50,
-                    ), 
-                    Text(
-                                timehour1.toString(),
-                                // DateTime.now().toString(),
-                                style: GoogleFonts.openSans(
-                                  fontSize: 20,
-                                ),
-                                textScaleFactor: 1,
-                              ),
-
-                              // Text(timeweek.toString())
-                   ],
-                 ), 
-             ],
-         ),
-          ],
-                );    
-
-  }
-  else if(periodic == "Hour"&&AddManualLeft>2){
-   return 
-                Column(
-                  children: <Widget>[
-                    Row(children: <Widget>[
-                      Container(
-                        width: SizeConfig.blockSizeHorizontal*23.5,
-                      ),
-                              Column(
-                                children: <Widget>[
-                                  Text(timestarthour.toString()),
-                                  Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                                ],
-                              ),
-                            Container(
-                              width: SizeConfig.blockSizeHorizontal*31.9,
-                            ),
-
-                             Column(
-                               children: <Widget>[
-                                 Text("??"),
-                                 Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                               ],
-                             ),
-
-                            Container(
-                              width: SizeConfig.blockSizeHorizontal*31.9,
-                            ),
-
-                             Column(
-                               children: <Widget>[
-                                 Text(timeendhour.toString()),
-                                 Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                               ],
-                             ),
-                                                       
-                    ],
+                  // Text(timeweek.toString())
+                ],
+              ),
+            ],
+          ),
+        ],
+      );
+    } else if (periodic == "Week" && AddManualLeft > 2) {
+      return Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 23.5,
+              ),
+              Column(
+                children: <Widget>[
+                  Text(timestartweek.toString()),
+                  Container(
+                    color: Colors.black,
+                    child: VerticalDivider(
+                      width: SizeConfig.blockSizeHorizontal * 0.5,
+                      indent: 10,
+                      endIndent: 15,
                     ),
-                 
-
-                 Column(
-             children: <Widget>[
-               Container(
-                 child: Divider(color: Colors.black,
-                 height: SizeConfig.blockSizeVertical*0.2,
-                  thickness: SizeConfig.blockSizeHorizontal*0.5,
-                  indent: SizeConfig.blockSizeHorizontal*25,
-                  endIndent: SizeConfig.blockSizeVertical*2,
                   ),
+                ],
+              ),
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 31.9,
+              ),
+              Column(
+                children: <Widget>[
+                  Text("??"),
+                  Container(
+                    color: Colors.black,
+                    child: VerticalDivider(
+                      width: SizeConfig.blockSizeHorizontal * 0.5,
+                      indent: 10,
+                      endIndent: 15,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 31.9,
+              ),
+              Column(
+                children: <Widget>[
+                  Text(timeendweek.toString()),
+                  Container(
+                    color: Colors.black,
+                    child: VerticalDivider(
+                      width: SizeConfig.blockSizeHorizontal * 0.5,
+                      indent: 10,
+                      endIndent: 15,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          Column(
+            children: <Widget>[
+              Container(
+                child: Divider(
+                  color: Colors.black,
+                  height: SizeConfig.blockSizeVertical * 0.2,
+                  thickness: SizeConfig.blockSizeHorizontal * 0.5,
+                  indent: SizeConfig.blockSizeHorizontal * 25,
+                  endIndent: SizeConfig.blockSizeVertical * 2,
                 ),
+              ),
+              Row(
+                children: <Widget>[
+                  Container(
+                    width: SizeConfig.blockSizeHorizontal * 50,
+                  ),
+                  Text(
+                    timeweek.toString(),
+                    // DateTime.now().toString(),
+                    style: GoogleFonts.openSans(
+                      fontSize: 20,
+                    ),
+                    textScaleFactor: 1,
+                  ),
 
-                 Row(
-                   children: <Widget>[
-                    Container(
-                      width: SizeConfig.blockSizeHorizontal*50,
-                    ), 
-                    Text(
-                                timehour1.toString(),
-                                // DateTime.now().toString(),
-                                style: GoogleFonts.openSans(
-                                  fontSize: 20,
-                                ),
-                                textScaleFactor: 1,
-                              ),
+                  // Text(timeweek.toString())
+                ],
+              ),
+            ],
+          ),
+        ],
+      );
+    }
+    if (periodic == "Day" && AddManualLeft <= 2) {
+      // timestampday();
+      return Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 23.5,
+              ),
+              Column(
+                children: <Widget>[
+                  Text(timestartday.toString()),
+                  Container(
+                    color: Colors.black,
+                    child: VerticalDivider(
+                      width: SizeConfig.blockSizeHorizontal * 0.5,
+                      indent: 10,
+                      endIndent: 15,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 66.8,
+              ),
+              Column(
+                children: <Widget>[
+                  Text(timeendday.toString()),
+                  Container(
+                    color: Colors.black,
+                    child: VerticalDivider(
+                      width: SizeConfig.blockSizeHorizontal * 0.5,
+                      indent: 10,
+                      endIndent: 15,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          Column(
+            children: <Widget>[
+              Container(
+                child: Divider(
+                  color: Colors.black,
+                  height: SizeConfig.blockSizeVertical * 0.2,
+                  thickness: SizeConfig.blockSizeHorizontal * 0.5,
+                  indent: SizeConfig.blockSizeHorizontal * 25,
+                  endIndent: SizeConfig.blockSizeVertical * 2,
+                ),
+              ),
+              Row(
+                children: <Widget>[
+                  Container(
+                    width: SizeConfig.blockSizeHorizontal * 50,
+                  ),
+                  Text(
+                    timeday.toString(),
+                    // DateTime.now().toString(),
+                    style: GoogleFonts.openSans(
+                      fontSize: 20,
+                    ),
+                    textScaleFactor: 1,
+                  ),
 
-                              // Text(timeweek.toString())
-                   ],
-                 ), 
-             ],
-         ),
-          ],
-                );    
+                  // Text(timeweek.toString())
+                ],
+              ),
+            ],
+          ),
+        ],
+      );
+    } else if (periodic == "Day" && AddManualLeft > 4) {
+      return Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 23.5,
+              ),
+              Column(
+                children: <Widget>[
+                  Text(timestartday.toString()),
+                  Container(
+                    color: Colors.black,
+                    child: VerticalDivider(
+                      width: SizeConfig.blockSizeHorizontal * 0.5,
+                      indent: 10,
+                      endIndent: 15,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 20.3,
+              ),
+              Column(
+                children: <Widget>[
+                  Text("??"),
+                  Container(
+                    color: Colors.black,
+                    child: VerticalDivider(
+                      width: SizeConfig.blockSizeHorizontal * 0.5,
+                      indent: 10,
+                      endIndent: 15,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 20.3,
+              ),
+              Column(
+                children: <Widget>[
+                  Text("??"),
+                  Container(
+                    color: Colors.black,
+                    child: VerticalDivider(
+                      width: SizeConfig.blockSizeHorizontal * 0.5,
+                      indent: 10,
+                      endIndent: 15,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 20.3,
+              ),
+              Column(
+                children: <Widget>[
+                  Text(timeendday.toString()),
+                  Container(
+                    color: Colors.black,
+                    child: VerticalDivider(
+                      width: SizeConfig.blockSizeHorizontal * 0.5,
+                      indent: 10,
+                      endIndent: 15,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          Column(
+            children: <Widget>[
+              Container(
+                child: Divider(
+                  color: Colors.black,
+                  height: SizeConfig.blockSizeVertical * 0.2,
+                  thickness: SizeConfig.blockSizeHorizontal * 0.5,
+                  indent: SizeConfig.blockSizeHorizontal * 25,
+                  endIndent: SizeConfig.blockSizeVertical * 2,
+                ),
+              ),
+              Row(
+                children: <Widget>[
+                  Container(
+                    width: SizeConfig.blockSizeHorizontal * 50,
+                  ),
+                  Text(
+                    timeday.toString(),
+                    // DateTime.now().toString(),
+                    style: GoogleFonts.openSans(
+                      fontSize: 20,
+                    ),
+                    textScaleFactor: 1,
+                  ),
 
+                  // Text(timeweek.toString())
+                ],
+              ),
+            ],
+          ),
+        ],
+      );
+    } else if (periodic == "Day" && AddManualLeft > 2) {
+      return Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 23.5,
+              ),
+              Column(
+                children: <Widget>[
+                  Text(timestartday.toString()),
+                  Container(
+                    color: Colors.black,
+                    child: VerticalDivider(
+                      width: SizeConfig.blockSizeHorizontal * 0.5,
+                      indent: 10,
+                      endIndent: 15,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 31.9,
+              ),
+              Column(
+                children: <Widget>[
+                  Text("??"),
+                  Container(
+                    color: Colors.black,
+                    child: VerticalDivider(
+                      width: SizeConfig.blockSizeHorizontal * 0.5,
+                      indent: 10,
+                      endIndent: 15,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 31.9,
+              ),
+              Column(
+                children: <Widget>[
+                  Text(timeendday.toString()),
+                  Container(
+                    color: Colors.black,
+                    child: VerticalDivider(
+                      width: SizeConfig.blockSizeHorizontal * 0.5,
+                      indent: 10,
+                      endIndent: 15,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          Column(
+            children: <Widget>[
+              Container(
+                child: Divider(
+                  color: Colors.black,
+                  height: SizeConfig.blockSizeVertical * 0.2,
+                  thickness: SizeConfig.blockSizeHorizontal * 0.5,
+                  indent: SizeConfig.blockSizeHorizontal * 25,
+                  endIndent: SizeConfig.blockSizeVertical * 2,
+                ),
+              ),
+              Row(
+                children: <Widget>[
+                  Container(
+                    width: SizeConfig.blockSizeHorizontal * 50,
+                  ),
+                  Text(
+                    timeday.toString(),
+                    // DateTime.now().toString(),
+                    style: GoogleFonts.openSans(
+                      fontSize: 20,
+                    ),
+                    textScaleFactor: 1,
+                  ),
+
+                  // Text(timeweek.toString())
+                ],
+              ),
+            ],
+          ),
+        ],
+      );
+    }
+
+    if (periodic == "Hour" && AddManualLeft <= 2) {
+      // timestampday();
+      return Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 23.5,
+              ),
+              Column(
+                children: <Widget>[
+                  Text(timestarthour.toString()),
+                  Container(
+                    color: Colors.black,
+                    child: VerticalDivider(
+                      width: SizeConfig.blockSizeHorizontal * 0.5,
+                      indent: 10,
+                      endIndent: 15,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 66.8,
+              ),
+              Column(
+                children: <Widget>[
+                  Text(timeendhour.toString()),
+                  Container(
+                    color: Colors.black,
+                    child: VerticalDivider(
+                      width: SizeConfig.blockSizeHorizontal * 0.5,
+                      indent: 10,
+                      endIndent: 15,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          Column(
+            children: <Widget>[
+              Container(
+                child: Divider(
+                  color: Colors.black,
+                  height: SizeConfig.blockSizeVertical * 0.2,
+                  thickness: SizeConfig.blockSizeHorizontal * 0.5,
+                  indent: SizeConfig.blockSizeHorizontal * 25,
+                  endIndent: SizeConfig.blockSizeVertical * 2,
+                ),
+              ),
+              Row(
+                children: <Widget>[
+                  Container(
+                    width: SizeConfig.blockSizeHorizontal * 50,
+                  ),
+                  Text(
+                    timehour1.toString(),
+                    // DateTime.now().toString(),
+                    style: GoogleFonts.openSans(
+                      fontSize: 20,
+                    ),
+                    textScaleFactor: 1,
+                  ),
+
+                  // Text(timeweek.toString())
+                ],
+              ),
+            ],
+          ),
+        ],
+      );
+    } else if (periodic == "Hour" && AddManualLeft > 4) {
+      return Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 23.5,
+              ),
+              Column(
+                children: <Widget>[
+                  Text(timestarthour.toString()),
+                  Container(
+                    color: Colors.black,
+                    child: VerticalDivider(
+                      width: SizeConfig.blockSizeHorizontal * 0.5,
+                      indent: 10,
+                      endIndent: 15,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 20.3,
+              ),
+              Column(
+                children: <Widget>[
+                  Text("??"),
+                  Container(
+                    color: Colors.black,
+                    child: VerticalDivider(
+                      width: SizeConfig.blockSizeHorizontal * 0.5,
+                      indent: 10,
+                      endIndent: 15,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 20.3,
+              ),
+              Column(
+                children: <Widget>[
+                  Text("??"),
+                  Container(
+                    color: Colors.black,
+                    child: VerticalDivider(
+                      width: SizeConfig.blockSizeHorizontal * 0.5,
+                      indent: 10,
+                      endIndent: 15,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 20.3,
+              ),
+              Column(
+                children: <Widget>[
+                  Text(timeendday.toString()),
+                  Container(
+                    color: Colors.black,
+                    child: VerticalDivider(
+                      width: SizeConfig.blockSizeHorizontal * 0.5,
+                      indent: 10,
+                      endIndent: 15,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          Column(
+            children: <Widget>[
+              Container(
+                child: Divider(
+                  color: Colors.black,
+                  height: SizeConfig.blockSizeVertical * 0.2,
+                  thickness: SizeConfig.blockSizeHorizontal * 0.5,
+                  indent: SizeConfig.blockSizeHorizontal * 25,
+                  endIndent: SizeConfig.blockSizeVertical * 2,
+                ),
+              ),
+              Row(
+                children: <Widget>[
+                  Container(
+                    width: SizeConfig.blockSizeHorizontal * 50,
+                  ),
+                  Text(
+                    timehour1.toString(),
+                    // DateTime.now().toString(),
+                    style: GoogleFonts.openSans(
+                      fontSize: 20,
+                    ),
+                    textScaleFactor: 1,
+                  ),
+
+                  // Text(timeweek.toString())
+                ],
+              ),
+            ],
+          ),
+        ],
+      );
+    } else if (periodic == "Hour" && AddManualLeft > 2) {
+      return Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 23.5,
+              ),
+              Column(
+                children: <Widget>[
+                  Text(timestarthour.toString()),
+                  Container(
+                    color: Colors.black,
+                    child: VerticalDivider(
+                      width: SizeConfig.blockSizeHorizontal * 0.5,
+                      indent: 10,
+                      endIndent: 15,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 31.9,
+              ),
+              Column(
+                children: <Widget>[
+                  Text("??"),
+                  Container(
+                    color: Colors.black,
+                    child: VerticalDivider(
+                      width: SizeConfig.blockSizeHorizontal * 0.5,
+                      indent: 10,
+                      endIndent: 15,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 31.9,
+              ),
+              Column(
+                children: <Widget>[
+                  Text(timeendhour.toString()),
+                  Container(
+                    color: Colors.black,
+                    child: VerticalDivider(
+                      width: SizeConfig.blockSizeHorizontal * 0.5,
+                      indent: 10,
+                      endIndent: 15,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          Column(
+            children: <Widget>[
+              Container(
+                child: Divider(
+                  color: Colors.black,
+                  height: SizeConfig.blockSizeVertical * 0.2,
+                  thickness: SizeConfig.blockSizeHorizontal * 0.5,
+                  indent: SizeConfig.blockSizeHorizontal * 25,
+                  endIndent: SizeConfig.blockSizeVertical * 2,
+                ),
+              ),
+              Row(
+                children: <Widget>[
+                  Container(
+                    width: SizeConfig.blockSizeHorizontal * 50,
+                  ),
+                  Text(
+                    timehour1.toString(),
+                    // DateTime.now().toString(),
+                    style: GoogleFonts.openSans(
+                      fontSize: 20,
+                    ),
+                    textScaleFactor: 1,
+                  ),
+
+                  // Text(timeweek.toString())
+                ],
+              ),
+            ],
+          ),
+        ],
+      );
+    } else {}
   }
-  else{}
 
+Widget nulldivider(){
+    return Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 23.5,
+              ),
+              Column(
+                children: <Widget>[
+                  Text("??"),
+                  Container(
+                    color: Colors.black,
+                    child: VerticalDivider(
+                      width: SizeConfig.blockSizeHorizontal * 0.5,
+                      indent: 10,
+                      endIndent: 15,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 68,
+              ),
+              Column(
+                children: <Widget>[
+                  Text("??"),
+                  Container(
+                    color: Colors.black,
+                    child: VerticalDivider(
+                      width: SizeConfig.blockSizeHorizontal * 0.5,
+                      indent: 10,
+                      endIndent: 15,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          Column(
+            children: <Widget>[
+              Container(
+                child: Divider(
+                  color: Colors.black,
+                  height: SizeConfig.blockSizeVertical * 0.2,
+                  thickness: SizeConfig.blockSizeHorizontal * 0.5,
+                  indent: SizeConfig.blockSizeHorizontal * 25,
+                  endIndent: SizeConfig.blockSizeVertical * 2,
+                ),
+              ),
+              Row(
+                children: <Widget>[
+                  Container(
+                    width: SizeConfig.blockSizeHorizontal * 57,
+                  ),
+                  Container(
+                    child: Text("  ??  "),
+                  ),
+
+                  // Text(timeweek.toString())
+                ],
+              ),
+            ],
+          ),
+        ],
+      );
 }
 
-Widget testdivider(){
-  if(AddManualLeft <= 2){
-  return
-                Column(
-                  children: <Widget>[
-                    Row(children: <Widget>[
-                      Container(
-                        width: SizeConfig.blockSizeHorizontal*23.5,
-                      ),
-                              Column(
-                                children: <Widget>[
-                                  Text("12"),
-                                  Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                                ],
-                              ),
-
-                            Container(
-                              width: SizeConfig.blockSizeHorizontal*66.8,
-                            ),
-
-                             Column(
-                               children: <Widget>[
-                                 Text("20"),
-                                 Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                               ],
-                             ),
-
-                             
-                            
-                    ],
+  Widget testdivider() {
+    if (AddManualLeft <= 2) {
+      return Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 23.5,
+              ),
+              Column(
+                children: <Widget>[
+                  Text("12"),
+                  Container(
+                    color: Colors.black,
+                    child: VerticalDivider(
+                      width: SizeConfig.blockSizeHorizontal * 0.5,
+                      indent: 10,
+                      endIndent: 15,
                     ),
-                 
-
-                 Column(
-             children: <Widget>[
-               Container(
-                 child: Divider(color: Colors.black,
-                 height: SizeConfig.blockSizeVertical*0.2,
-                  thickness: SizeConfig.blockSizeHorizontal*0.5,
-                  indent: SizeConfig.blockSizeHorizontal*25,
-                  endIndent: SizeConfig.blockSizeVertical*2,
                   ),
-                ),
-
-                 Row(
-                   children: <Widget>[
-                    Container(
-                      width: SizeConfig.blockSizeHorizontal*40,
-                    ), 
-                     Text(
-                                timehour1.toString(),
-                                // DateTime.now().toString(),
-                                style: GoogleFonts.openSans(
-                                  fontSize: 20,
-                                ),
-                                textScaleFactor: 1,
-                              ),
-                      Container(
-                        width: SizeConfig.blockSizeHorizontal*2,
-                      ),        
-
-                   ],
-                 ), 
-             ],
-         ),
-          ],
-                );
-  }else if(AddManualLeft>4){
-      return
-                Column(
-                  children: <Widget>[
-                    Row(children: <Widget>[
-                      Container(
-                        width: SizeConfig.blockSizeHorizontal*23.5,
-                      ),
-                              Column(
-                                children: <Widget>[
-                                  Text("12"),
-                                  Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                                ],
-                              ),
-
-                            Container(
-                              width: SizeConfig.blockSizeHorizontal*19.8,
-                            ),
-
-                             Column(
-                               children: <Widget>[
-                                 Text("20"),
-                                 Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                               ],
-                             ),
-
-                            Container(
-                              width: SizeConfig.blockSizeHorizontal*19.8,
-                            ),
-
-                             Column(
-                               children: <Widget>[
-                                 Text("20"),
-                                 Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                               ],
-                             ),
-                                                         Container(
-                              width: SizeConfig.blockSizeHorizontal*19.8,
-                            ),
-
-                             Column(
-                               children: <Widget>[
-                                 Text("20"),
-                                 Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                               ],
-                             ),
-                            
-                    ],
+                ],
+              ),
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 66.8,
+              ),
+              Column(
+                children: <Widget>[
+                  Text("20"),
+                  Container(
+                    color: Colors.black,
+                    child: VerticalDivider(
+                      width: SizeConfig.blockSizeHorizontal * 0.5,
+                      indent: 10,
+                      endIndent: 15,
                     ),
-                 
-
-                 Column(
-             children: <Widget>[
-               Container(
-                 child: Divider(color: Colors.black,
-                 height: SizeConfig.blockSizeVertical*0.2,
-                  thickness: SizeConfig.blockSizeHorizontal*0.5,
-                  indent: SizeConfig.blockSizeHorizontal*25,
-                  endIndent: SizeConfig.blockSizeVertical*2,
                   ),
+                ],
+              ),
+            ],
+          ),
+          Column(
+            children: <Widget>[
+              Container(
+                child: Divider(
+                  color: Colors.black,
+                  height: SizeConfig.blockSizeVertical * 0.2,
+                  thickness: SizeConfig.blockSizeHorizontal * 0.5,
+                  indent: SizeConfig.blockSizeHorizontal * 25,
+                  endIndent: SizeConfig.blockSizeVertical * 2,
                 ),
-
-                 Row(
-                   children: <Widget>[
-                    Container(
-                      width: SizeConfig.blockSizeHorizontal*40,
-                    ), 
-                     Text(
-                                timehour1.toString(),
-                                // DateTime.now().toString(),
-                                style: GoogleFonts.openSans(
-                                  fontSize: 20,
-                                ),
-                                textScaleFactor: 1,
-                              ),
-                      Container(
-                        width: SizeConfig.blockSizeHorizontal*2,
-                      ),        
-
-                   ],
-                 ), 
-             ],
-         ),
-          ],
-                );
-  } 
-  else if ( AddManualLeft>2) {
-      return
-                Column(
-                  children: <Widget>[
-                    Row(children: <Widget>[
-                      Container(
-                        width: SizeConfig.blockSizeHorizontal*23.5,
-                      ),
-                              Column(
-                                children: <Widget>[
-                                  Text("12"),
-                                  Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                                ],
-                              ),
-
-                            Container(
-                              width: SizeConfig.blockSizeHorizontal*31.5,
-                            ),
-
-                             Column(
-                               children: <Widget>[
-                                 Text("20"),
-                                 Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                               ],
-                             ),
-
-                                                        Container(
-                              width: SizeConfig.blockSizeHorizontal*31.5,
-                            ),
-
-                             Column(
-                               children: <Widget>[
-                                 Text("20"),
-                                 Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                               ],
-                             ),
-                             
-                            
-                    ],
+              ),
+              Row(
+                children: <Widget>[
+                  Container(
+                    width: SizeConfig.blockSizeHorizontal * 40,
+                  ),
+                  Text(
+                    timehour1.toString(),
+                    // DateTime.now().toString(),
+                    style: GoogleFonts.openSans(
+                      fontSize: 20,
                     ),
-                 
-
-                 Column(
-             children: <Widget>[
-               Container(
-                 child: Divider(color: Colors.black,
-                 height: SizeConfig.blockSizeVertical*0.2,
-                  thickness: SizeConfig.blockSizeHorizontal*0.5,
-                  indent: SizeConfig.blockSizeHorizontal*25,
-                  endIndent: SizeConfig.blockSizeVertical*2,
+                    textScaleFactor: 1,
                   ),
+                  Container(
+                    width: SizeConfig.blockSizeHorizontal * 2,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
+      );
+    } else if (AddManualLeft > 4) {
+      return Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 23.5,
+              ),
+              Column(
+                children: <Widget>[
+                  Text("12"),
+                  Container(
+                    color: Colors.black,
+                    child: VerticalDivider(
+                      width: SizeConfig.blockSizeHorizontal * 0.5,
+                      indent: 10,
+                      endIndent: 15,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 19.8,
+              ),
+              Column(
+                children: <Widget>[
+                  Text("20"),
+                  Container(
+                    color: Colors.black,
+                    child: VerticalDivider(
+                      width: SizeConfig.blockSizeHorizontal * 0.5,
+                      indent: 10,
+                      endIndent: 15,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 19.8,
+              ),
+              Column(
+                children: <Widget>[
+                  Text("20"),
+                  Container(
+                    color: Colors.black,
+                    child: VerticalDivider(
+                      width: SizeConfig.blockSizeHorizontal * 0.5,
+                      indent: 10,
+                      endIndent: 15,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 19.8,
+              ),
+              Column(
+                children: <Widget>[
+                  Text("20"),
+                  Container(
+                    color: Colors.black,
+                    child: VerticalDivider(
+                      width: SizeConfig.blockSizeHorizontal * 0.5,
+                      indent: 10,
+                      endIndent: 15,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          Column(
+            children: <Widget>[
+              Container(
+                child: Divider(
+                  color: Colors.black,
+                  height: SizeConfig.blockSizeVertical * 0.2,
+                  thickness: SizeConfig.blockSizeHorizontal * 0.5,
+                  indent: SizeConfig.blockSizeHorizontal * 25,
+                  endIndent: SizeConfig.blockSizeVertical * 2,
                 ),
-
-                 Row(
-                   children: <Widget>[
-                    Container(
-                      width: SizeConfig.blockSizeHorizontal*40,
-                    ), 
-                     Text(
-                                timehour1.toString(),
-                                // DateTime.now().toString(),
-                                style: GoogleFonts.openSans(
-                                  fontSize: 20,
-                                ),
-                                textScaleFactor: 1,
-                              ),
-                      Container(
-                        width: SizeConfig.blockSizeHorizontal*2,
-                      ),        
-
-                   ],
-                 ), 
-             ],
-         ),
-          ],
-                );
-    
-  } 
-  
-  else {
+              ),
+              Row(
+                children: <Widget>[
+                  Container(
+                    width: SizeConfig.blockSizeHorizontal * 40,
+                  ),
+                  Text(
+                    timehour1.toString(),
+                    // DateTime.now().toString(),
+                    style: GoogleFonts.openSans(
+                      fontSize: 20,
+                    ),
+                    textScaleFactor: 1,
+                  ),
+                  Container(
+                    width: SizeConfig.blockSizeHorizontal * 2,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
+      );
+    } else if (AddManualLeft > 2) {
+      return Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 23.5,
+              ),
+              Column(
+                children: <Widget>[
+                  Text("12"),
+                  Container(
+                    color: Colors.black,
+                    child: VerticalDivider(
+                      width: SizeConfig.blockSizeHorizontal * 0.5,
+                      indent: 10,
+                      endIndent: 15,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 31.5,
+              ),
+              Column(
+                children: <Widget>[
+                  Text("20"),
+                  Container(
+                    color: Colors.black,
+                    child: VerticalDivider(
+                      width: SizeConfig.blockSizeHorizontal * 0.5,
+                      indent: 10,
+                      endIndent: 15,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 31.5,
+              ),
+              Column(
+                children: <Widget>[
+                  Text("20"),
+                  Container(
+                    color: Colors.black,
+                    child: VerticalDivider(
+                      width: SizeConfig.blockSizeHorizontal * 0.5,
+                      indent: 10,
+                      endIndent: 15,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          Column(
+            children: <Widget>[
+              Container(
+                child: Divider(
+                  color: Colors.black,
+                  height: SizeConfig.blockSizeVertical * 0.2,
+                  thickness: SizeConfig.blockSizeHorizontal * 0.5,
+                  indent: SizeConfig.blockSizeHorizontal * 25,
+                  endIndent: SizeConfig.blockSizeVertical * 2,
+                ),
+              ),
+              Row(
+                children: <Widget>[
+                  Container(
+                    width: SizeConfig.blockSizeHorizontal * 40,
+                  ),
+                  Text(
+                    timehour1.toString(),
+                    // DateTime.now().toString(),
+                    style: GoogleFonts.openSans(
+                      fontSize: 20,
+                    ),
+                    textScaleFactor: 1,
+                  ),
+                  Container(
+                    width: SizeConfig.blockSizeHorizontal * 2,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
+      );
+    } else {}
   }
-}
 
-Widget timestampday (){
-              return 
-                Column(
-                  children: <Widget>[
-                    Row(children: <Widget>[
-                      Container(
-                        width: SizeConfig.blockSizeHorizontal*23.5,
-                      ),
-                              Column(
-                                children: <Widget>[
-                                  Text(' 9 '),
-                                  Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                                ],
-                              ),
-
-                            Container(
-                              width: SizeConfig.blockSizeHorizontal*14.5,
-                            ),
-
-                             Column(
-                               children: <Widget>[
-                                 Text('15'),
-                                 Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                               ],
-                             ),
-                            
-                            Container(
-                              width: SizeConfig.blockSizeHorizontal*14.5,
-                            ),
-
-                             Column(
-                               children: <Widget>[
-                                 Text('21'),
-                                 Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                               ],
-                             ),
-                            
-                            Container(
-                              width: SizeConfig.blockSizeHorizontal*14,
-                            ),
-
-                             Column(
-                               children: <Widget>[
-                                 Text(' 4 '),
-                                 Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                               ],
-                             ),
-
-                            Container(
-                              width: SizeConfig.blockSizeHorizontal*14,
-                            ),
-
-                             Column(
-                               children: <Widget>[
-                                 Text('9'),
-                                 Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                               ],
-                             ),                            
-                    ],
-                    ),
-                 
-
-                 Column(
-             children: <Widget>[
-               Container(
-                 child: Divider(color: Colors.black,
-                 height: SizeConfig.blockSizeVertical*0.2,
-                  thickness: SizeConfig.blockSizeHorizontal*0.5,
-                  indent: SizeConfig.blockSizeHorizontal*25,
-                  endIndent: SizeConfig.blockSizeVertical*2,
+  Widget timestampday() {
+    return Column(
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            Container(
+              width: SizeConfig.blockSizeHorizontal * 23.5,
+            ),
+            Column(
+              children: <Widget>[
+                Text(' 9 '),
+                Container(
+                  color: Colors.black,
+                  child: VerticalDivider(
+                    width: SizeConfig.blockSizeHorizontal * 0.5,
+                    indent: 10,
+                    endIndent: 15,
                   ),
                 ),
-
-                 Row(
-                   children: <Widget>[
-                    Container(
-                      width: SizeConfig.blockSizeHorizontal*40,
-                    ), 
-                     Text(
-                                '$newDt',
-                                // DateTime.now().toString(),
-                                style: GoogleFonts.openSans(
-                                  fontSize: 20,
-                                ),
-                                textScaleFactor: 1,
-                              ),
-                   ],
-                 ), 
-             ],
-         ),
+              ],
+            ),
+            Container(
+              width: SizeConfig.blockSizeHorizontal * 14.5,
+            ),
+            Column(
+              children: <Widget>[
+                Text('15'),
+                Container(
+                  color: Colors.black,
+                  child: VerticalDivider(
+                    width: SizeConfig.blockSizeHorizontal * 0.5,
+                    indent: 10,
+                    endIndent: 15,
+                  ),
+                ),
+              ],
+            ),
+            Container(
+              width: SizeConfig.blockSizeHorizontal * 14.5,
+            ),
+            Column(
+              children: <Widget>[
+                Text('21'),
+                Container(
+                  color: Colors.black,
+                  child: VerticalDivider(
+                    width: SizeConfig.blockSizeHorizontal * 0.5,
+                    indent: 10,
+                    endIndent: 15,
+                  ),
+                ),
+              ],
+            ),
+            Container(
+              width: SizeConfig.blockSizeHorizontal * 14,
+            ),
+            Column(
+              children: <Widget>[
+                Text(' 4 '),
+                Container(
+                  color: Colors.black,
+                  child: VerticalDivider(
+                    width: SizeConfig.blockSizeHorizontal * 0.5,
+                    indent: 10,
+                    endIndent: 15,
+                  ),
+                ),
+              ],
+            ),
+            Container(
+              width: SizeConfig.blockSizeHorizontal * 14,
+            ),
+            Column(
+              children: <Widget>[
+                Text('9'),
+                Container(
+                  color: Colors.black,
+                  child: VerticalDivider(
+                    width: SizeConfig.blockSizeHorizontal * 0.5,
+                    indent: 10,
+                    endIndent: 15,
+                  ),
+                ),
+              ],
+            ),
           ],
-                );
-}
-
+        ),
+        Column(
+          children: <Widget>[
+            Container(
+              child: Divider(
+                color: Colors.black,
+                height: SizeConfig.blockSizeVertical * 0.2,
+                thickness: SizeConfig.blockSizeHorizontal * 0.5,
+                indent: SizeConfig.blockSizeHorizontal * 25,
+                endIndent: SizeConfig.blockSizeVertical * 2,
+              ),
+            ),
+            Row(
+              children: <Widget>[
+                Container(
+                  width: SizeConfig.blockSizeHorizontal * 40,
+                ),
+                Text(
+                  '$newDt',
+                  // DateTime.now().toString(),
+                  style: GoogleFonts.openSans(
+                    fontSize: 20,
+                  ),
+                  textScaleFactor: 1,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
+  }
 
   Widget buildNavigator(bool nav) {
     if (nav) {
@@ -1599,7 +1575,6 @@ Widget timestampday (){
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 Container(
-
                   child: Card(
                     child: IconButton(
                         icon: Icon(Icons.keyboard_arrow_left),
@@ -1736,7 +1711,6 @@ Widget timestampday (){
     if (dataq != null) {
       stateData = true;
       try {
-
         tempDate = DateTime.parse(dataq.toString().split(".")[0].toString());
 
         stateData = true;
@@ -1752,7 +1726,6 @@ Widget timestampday (){
           fiftyDaysFromNow =
               tempDate.add(new Duration(days: -AddManualLeft * 7));
         }
-
 
         var format = DateFormat('yyyyMMddTkk0000')
             .format(fiftyDaysFromNow)
@@ -1785,7 +1758,6 @@ Widget timestampday (){
         print(data1);
         print(data2);
         // print(dataa);
-        
 
         timeDisplayStart = data1;
         timeDisplayEnd = data2;
@@ -1817,13 +1789,12 @@ Widget timestampday (){
 
         timeendhour = data2;
         timeendhour = DateFormat('kk').format(DateTime.parse(timeendhour));
-        
+
         timehour = data1;
         timehour = DateFormat('Hm').format(DateTime.parse(timehour));
-        
+
         timehour1 = data1;
         timehour1 = DateFormat('yMMMMd').format(DateTime.parse(timehour1));
-
 
         DateTime endDate;
         if (changeDataPeriodic == 0) {
@@ -1857,7 +1828,6 @@ Widget timestampday (){
       } catch (e) {
         print("eror : " + e.toString());
       }
-
     } else {}
   }
 
@@ -1885,7 +1855,6 @@ Widget timestampday (){
   }
 
   queryAll(String button) {
-
     String db;
     String value;
 
@@ -1916,7 +1885,6 @@ Widget timestampday (){
     }
 
     if (changeDataPeriodic == 2) {
-
       if (button == "left") {
         value = datecalculate(7, timeDisplayStart, timeDisplayEnd);
       } else if (button == "right") {
@@ -1943,37 +1911,35 @@ Widget timestampday (){
       dataQuery =
           'SELECT * FROM $db WHERE time_stamp BETWEEN "$start" AND "$end"';
     }
+    timestartweek = timeDisplayStart;
+    timestartweek = DateFormat('dd').format(DateTime.parse(timestartweek));
 
-        timestartweek = timeDisplayStart;
-        timestartweek = DateFormat('dd').format(DateTime.parse(timestartweek));
+    timeendweek = timeDisplayEnd;
+    timeendweek = DateFormat('dd').format(DateTime.parse(timeendweek));
 
-        timeendweek = timeDisplayEnd;
-        timeendweek = DateFormat('dd').format(DateTime.parse(timeendweek));
+    timeweek = timeDisplayStart;
+    timeweek = DateFormat('yMMM').format(DateTime.parse(timeweek));
 
-        timeweek = timeDisplayStart;
-        timeweek = DateFormat('yMMM').format(DateTime.parse(timeweek));
+    timestartday = timeDisplayStart;
+    timestartday = DateFormat('dd').format(DateTime.parse(timestartday));
 
-        timestartday = timeDisplayStart;
-        timestartday = DateFormat('dd').format(DateTime.parse(timestartday));
+    timeendday = timeDisplayEnd;
+    timeendday = DateFormat('dd').format(DateTime.parse(timeendday));
 
-        timeendday = timeDisplayEnd;
-        timeendday = DateFormat('dd').format(DateTime.parse(timeendday));
+    timeday = timeDisplayStart;
+    timeday = DateFormat('yMMM').format(DateTime.parse(timeday));
 
-        timeday = timeDisplayStart;
-        timeday = DateFormat('yMMM').format(DateTime.parse(timeday));
+    timestarthour = timeDisplayStart;
+    timestarthour = DateFormat('kk').format(DateTime.parse(timestarthour));
 
-        timestarthour = timeDisplayStart;
-        timestarthour = DateFormat('kk').format(DateTime.parse(timestarthour));
+    timeendhour = timeDisplayEnd;
+    timeendhour = DateFormat('kk').format(DateTime.parse(timeendhour));
 
-        timeendhour = timeDisplayEnd;
-        timeendhour = DateFormat('kk').format(DateTime.parse(timeendhour));
-    
-        timehour = timeDisplayStart;
-        timehour = DateFormat('Hm').format(DateTime.parse(timehour));
-        
-        timehour1 = timeDisplayStart;
-        timehour1 = DateFormat('yMMMMd').format(DateTime.parse(timehour1));
-        
+    timehour = timeDisplayStart;
+    timehour = DateFormat('Hm').format(DateTime.parse(timehour));
+
+    timehour1 = timeDisplayStart;
+    timehour1 = DateFormat('yMMMMd').format(DateTime.parse(timehour1));
 
     setState(() {});
   }
@@ -2083,7 +2049,6 @@ Widget timestampday (){
     await Future.delayed(const Duration(seconds: 2));
 
     setState(() {
-
       isLoading = false;
     });
   }
@@ -2110,7 +2075,6 @@ Widget timestampday (){
 
     var queryResult = DBProvider.db.getAllEmployees(dataQuery, 0);
 
-
     return FutureBuilder(
       future: queryResult,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -2133,7 +2097,6 @@ Widget timestampday (){
           List phasaB = new List();
           List phasaC = new List();
 
-
           for (int i = 0; i < snapshot.data.length; i++) {
             raw_data.add(snapshot.data[i].time_stamp.toString());
             phasaA.add(snapshot.data[i].energy_a);
@@ -2146,20 +2109,15 @@ Widget timestampday (){
               curr > next ? curr : next); //[0];//jsonDecode(phasaA).;
 
           if (phasaA != null) {
-
-          } else {
-
-          }
+          } else {}
 
           return Container(
             child: ListView.separated(
               separatorBuilder: (context, index) => Divider(
                 color: Colors.black,
               ),
-
               itemCount: titles.length,
               itemBuilder: (BuildContext context, int index) {
-
                 DateLimit = false;
 
                 if (index == 0) {
@@ -2372,16 +2330,13 @@ Widget timestampday (){
       var dataq = await loadlast(arrayDB[0]);
       if (dataq == null) {
         _getAllDB("5minutes");
-
       } else {
-
         changeDataPeriodic = 0;
         //  dataPeriodic
 
         changeQuery1("data1", "data2");
         setState(() {});
       }
-
     });
   }
 
@@ -2391,13 +2346,9 @@ Widget timestampday (){
       var dataq = await loadlast(arrayDB[1]);
       if (dataq == null) {
         _getAllDB("hourly");
-
-      } else {
-
-      }
+      } else {}
 
       timer = "daily";
-
     });
   }
 
@@ -2413,7 +2364,6 @@ Widget timestampday (){
           changeQuery1("data1", "data2");
         });
       } else {
-
         setState(() {});
       }
     });
@@ -2432,16 +2382,16 @@ Widget timestampday (){
       label2 = "dari : " + EmployeeApiProvider().getlengthdata().toString();
 
       var datadaily = await loadlast(arrayDB[2]);
-        var datamenit = await loadlast(arrayDB[0]);
-        var datajam = await loadlast(arrayDB[1]);
-        if (datamenit != null && datajam != null) {
-          _timergetDB();
-        }
-      //} 
+      var datamenit = await loadlast(arrayDB[0]);
+      var datajam = await loadlast(arrayDB[1]);
+      if (datamenit != null && datajam != null) {
+        _timergetDB();
+      }
+      //}
       else {
         EmployeeApiProvider()
             .getPartialdata(datadaily.toString(), newdate, "daily");
-            print("ambil daily data");
+        print("ambil daily data");
       }
 
       print("new date : " + newdate);
@@ -2484,10 +2434,7 @@ Widget timestampday (){
     if (differenceInminutes > 5) {
       EmployeeApiProvider()
           .getPartialdata(minuteslast.toString(), dateApi, "5minutes");
-
-    } else if (differenceInminutes < 2) {
-
-    }
+    } else if (differenceInminutes < 2) {}
     if (differenceInhourly > 70) {
       EmployeeApiProvider()
           .getPartialdata(hourlylast.toString(), dateApi, "hourly");
@@ -2503,6 +2450,5 @@ Widget timestampday (){
   _datechange(String formattedString) {
     var format = DateTime.parse(formattedString);
     DateTime dateTimeNow = DateTime.now();
-
   }
 }
