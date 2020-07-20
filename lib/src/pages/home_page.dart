@@ -678,7 +678,7 @@ class _HomePageState extends State<HomePage> {
       if (button == "left") {
         value = daycalculate(hourToDays.round(), timeDisplayStart, timeDisplayEnd);
       } else if (button == "right") {
-        value = daycalculate(hourToDays.round(), timeDisplayStart, timeDisplayEnd);
+        value = daycalculate(-hourToDays.round(), timeDisplayStart, timeDisplayEnd);
       }
       db = "month";
     }
