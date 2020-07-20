@@ -517,7 +517,7 @@ class UsageWidgets extends HomePage {
                 endIndent: SizeConfig.blockSizeVertical * 2,
               ),
             ),
-            (timeweekstart.toString() != timeweekend.toString())
+            (timedaystart.toString() != timedayend.toString())
                 ? Container(
                     child: Padding(
                       padding: EdgeInsets.fromLTRB(

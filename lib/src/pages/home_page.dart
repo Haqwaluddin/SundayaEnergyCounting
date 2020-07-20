@@ -191,7 +191,6 @@ class _HomePageState extends State<HomePage> {
           : SafeArea(
               child: Column(
                 children: <Widget>[
-                  Text("20"),
                   Container(
                       height: SizeConfig.blockSizeVertical * 37,
                       child: Center(
@@ -247,8 +246,10 @@ class _HomePageState extends State<HomePage> {
                     ),
                     // textScaleFactor: 1,
                   ),
-                  Container(
-                    width: SizeConfig.blockSizeHorizontal * 2,
+                  Stack(
+                    children: <Widget>[
+                      buildNavigator(statusMinutes),
+                    ],
                   ),
                 ],
               ),
@@ -718,9 +719,10 @@ class _HomePageState extends State<HomePage> {
     }
     timestartweek = timeDisplayStart;
     timestartweek = DateFormat('dd').format(DateTime.parse(timestartweek));
-
-    timestartweek = timeDisplayStart;
-    timestartweek = DateFormat('dd').format(DateTime.parse(timestartweek));
+    if (changeDataPeriodic == 2) {
+      timeweeklist = getDaysInBetween(
+          DateTime.parse(timeDisplayStart), DateTime.parse(timeDisplayEnd));
+    }
 
     timeendweek = timeDisplayEnd;
     timeendweek = DateFormat('dd').format(DateTime.parse(timeendweek));
@@ -728,17 +730,31 @@ class _HomePageState extends State<HomePage> {
     timeweekstart = timeDisplayStart;
     timeweekstart = DateFormat('yMMM').format(DateTime.parse(timeweekstart));
 
+    timeweekend = timeDisplayEnd;
+    timeweekend = DateFormat('yMMM').format(DateTime.parse(timeweekend));
+
     timestartday = timeDisplayStart;
     timestartday = DateFormat('dd').format(DateTime.parse(timestartday));
+    if (changeDataPeriodic == 1) {
+      timedaylist = getDaysInBetween(
+          DateTime.parse(timeDisplayStart), DateTime.parse(timeDisplayEnd));
+    }
 
     timeendday = timeDisplayEnd;
     timeendday = DateFormat('dd').format(DateTime.parse(timeendday));
 
-    timedayend = timeDisplayStart;
+    timedayend = timeDisplayEnd;
     timedayend = DateFormat('yMMM').format(DateTime.parse(timedayend));
+
+    timedaystart = timeDisplayStart;
+    timedaystart = DateFormat('yMMM').format(DateTime.parse(timedaystart));
 
     timestarthour = timeDisplayStart;
     timestarthour = DateFormat('kk').format(DateTime.parse(timestarthour));
+    if (changeDataPeriodic == 0) {
+      timehourlist = getHoursInBetween(
+          DateTime.parse(timeDisplayStart), DateTime.parse(timeDisplayEnd));
+    }
 
     timeendhour = timeDisplayEnd;
     timeendhour = DateFormat('kk').format(DateTime.parse(timeendhour));
