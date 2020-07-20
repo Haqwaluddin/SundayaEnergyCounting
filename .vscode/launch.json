@@ -5,7 +5,12 @@
     "version": "0.2.0",
     "configurations": [
         {
+<<<<<<< HEAD
             "name": "Flutter",
+=======
+            "name": "Dart",
+            "program": "lib/main.dart",
+>>>>>>> 24160e919dbe4e2a9e115c850d6d30ca73a93cce
             "request": "launch",
             "type": "dart"
         }

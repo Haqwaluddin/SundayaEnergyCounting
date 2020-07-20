@@ -130,11 +130,18 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int count = 0;
   var isLoading = false;
   int a = 0;
 
   void tambah() {
     counter++;
+  }
+
+  void incrementCounter() {
+    setState(() {
+      count++;
+    });
   }
 
   void buildText(String logFile) {
@@ -184,6 +191,7 @@ class _HomePageState extends State<HomePage> {
           : SafeArea(
               child: Column(
                 children: <Widget>[
+                  Text("20"),
                   Container(
                       height: SizeConfig.blockSizeVertical * 37,
                       child: Center(
@@ -237,11 +245,10 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
+                    // textScaleFactor: 1,
                   ),
-                  Stack(
-                    children: <Widget>[
-                      buildNavigator(statusMinutes),
-                    ],
+                  Container(
+                    width: SizeConfig.blockSizeHorizontal * 2,
                   ),
                 ],
               ),
@@ -529,7 +536,8 @@ class _HomePageState extends State<HomePage> {
         timeendweek = DateFormat('dd').format(DateTime.parse(timeendweek));
 
         timeweekstart = data1;
-        timeweekstart = DateFormat('yMMM').format(DateTime.parse(timeweekstart));
+        timeweekstart =
+            DateFormat('yMMM').format(DateTime.parse(timeweekstart));
 
         timeweekend = data2;
         timeweekend = DateFormat('yMMM').format(DateTime.parse(timeweekend));
@@ -647,9 +655,11 @@ class _HomePageState extends State<HomePage> {
       print("select hour");
 
       if (button == "left") {
-        value = minutecalculate((stackHour.round()), timeDisplayStart, timeDisplayEnd);
+        value = minutecalculate(
+            (stackHour.round()), timeDisplayStart, timeDisplayEnd);
       } else if (button == "right") {
-        value = minutecalculate((-stackHour.round()), timeDisplayStart, timeDisplayEnd);
+        value = minutecalculate(
+            (-stackHour.round()), timeDisplayStart, timeDisplayEnd);
       }
 
       db = "minutes";
@@ -658,27 +668,33 @@ class _HomePageState extends State<HomePage> {
     if (dataPeriodic[changeDataPeriodic].toString() == "Day") {
       print("select Day");
       if (button == "left") {
-        value = daycalculate((hourToDays.round()), timeDisplayStart, timeDisplayEnd);
+        value = daycalculate(
+            (hourToDays.round()), timeDisplayStart, timeDisplayEnd);
       } else if (button == "right") {
-        value = daycalculate((-hourToDays.round()), timeDisplayStart, timeDisplayEnd);
+        value = daycalculate(
+            (-hourToDays.round()), timeDisplayStart, timeDisplayEnd);
       }
       db = "hourly";
     }
 
     if (dataPeriodic[changeDataPeriodic].toString() == "Week") {
       if (button == "left") {
-        value = daycalculate(hourToDays.round(), timeDisplayStart, timeDisplayEnd);
+        value =
+            daycalculate(hourToDays.round(), timeDisplayStart, timeDisplayEnd);
       } else if (button == "right") {
-        value = daycalculate(-hourToDays.round(), timeDisplayStart, timeDisplayEnd);
+        value =
+            daycalculate(-hourToDays.round(), timeDisplayStart, timeDisplayEnd);
       }
       db = "daily";
     }
 
     if (dataPeriodic[changeDataPeriodic].toString() == "Month") {
       if (button == "left") {
-        value = daycalculate(hourToDays.round(), timeDisplayStart, timeDisplayEnd);
+        value =
+            daycalculate(hourToDays.round(), timeDisplayStart, timeDisplayEnd);
       } else if (button == "right") {
-        value = daycalculate(-hourToDays.round(), timeDisplayStart, timeDisplayEnd);
+        value =
+            daycalculate(-hourToDays.round(), timeDisplayStart, timeDisplayEnd);
       }
       db = "month";
     }
@@ -700,6 +716,8 @@ class _HomePageState extends State<HomePage> {
       dataQuery =
           'SELECT * FROM $db WHERE time_stamp BETWEEN "$start" AND "$end"';
     }
+    timestartweek = timeDisplayStart;
+    timestartweek = DateFormat('dd').format(DateTime.parse(timestartweek));
 
     timestartweek = timeDisplayStart;
     timestartweek = DateFormat('dd').format(DateTime.parse(timestartweek));

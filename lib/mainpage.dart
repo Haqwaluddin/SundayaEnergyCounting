@@ -221,390 +221,342 @@ class _MyHomePageState extends State<MyHomePage> {
 
         backgroundColor: Colors.white,
         body: DbStatus
-            ? Stack(
-                children: <Widget>[
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                        height: SizeConfig.blockSizeVertical * 2,
-                        width: SizeConfig.blockSizeHorizontal * 0,
-                      ),
-                      Card(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            IconButton(
-                                icon: Icon(Icons.delete),
-                                onPressed: () {
-
-                                  _timerBuild();
-                                  setState(() {
-                                    
-                                  });
-                                }),
-                            IconButton(
-                                icon: Icon(Icons.file_download),
-                                onPressed: () {
-                                  _startUpCheck();
-
-                                  print("panjang Json : "+EmployeeApiProvider().getlengthdata().toString());
-
-                                }),
-                          ],
+            ? SafeArea(
+              child: Stack(
+                  children: <Widget>[
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          height: SizeConfig.blockSizeVertical * 2,
+                          width: SizeConfig.blockSizeHorizontal * 0,
                         ),
-                      ),
-                      Center(
-                        child: Text(
-                          '$newDt',
-                          style: GoogleFonts.openSans(
-                            fontSize: 20,
+                        // Card(
+                        //   child: Row(
+                        //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        //     children: <Widget>[
+                        //       IconButton(
+                        //           icon: Icon(Icons.delete),
+                        //           onPressed: () {
+
+                        //             _timerBuild();
+                        //             setState(() {
+                                      
+                        //             });
+                        //           }),
+                        //       IconButton(
+                        //           icon: Icon(Icons.file_download),
+                        //           onPressed: () {
+                        //             _startUpCheck();
+
+                        //             print("panjang Json : "+EmployeeApiProvider().getlengthdata().toString());
+
+                        //           }),
+                        //     ],
+                        //   ),
+                        // ),
+                        Center(
+                          child: Text(
+                            '$newDt',
+                            style: GoogleFonts.openSans(
+                              fontSize: 20,
+                            ),
+                            textScaleFactor: 1,
                           ),
-                          textScaleFactor: 1,
                         ),
-                      ),
-                      Stack(
-                        children: <Widget>[
-                    //   Center(
-                    //   child: Container(
-                    //     width: SizeConfig.blockSizeHorizontal * 70,
-                    //     height: SizeConfig.blockSizeVertical * 22,
-                    //     // width: 200,
-                    //     child: Image.asset(
-                    //       'asset/linefix.png',
-                    //     ),
-                    //   ),
-                    // ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Column(
-                                children: <Widget>[
-                                  Container(
-                                    height: SizeConfig.blockSizeVertical * 2,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 7),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: Color.fromRGBO(36, 204, 51, 0.8),
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                      height: SizeConfig.blockSizeVertical * 5,
-                                      width: SizeConfig.blockSizeHorizontal * 45,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 10),
-                                            child: Text(
-                                              'Harvest',
-                                              style: GoogleFonts.openSans(
-                                                  fontSize: 15,
-                                                  color: Colors.white),
-                                              textScaleFactor: 1,
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(right: 10),
-                                            child: Text(
-                                              '30%',
-                                              style: GoogleFonts.openSans(
-                                                  fontSize: 20,
-                                                  color: Colors.white),
-                                              textScaleFactor: 1,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                        Stack(
+                          children: <Widget>[
+                      //   Center(
+                      //   child: Container(
+                      //     width: SizeConfig.blockSizeHorizontal * 70,
+                      //     height: SizeConfig.blockSizeVertical * 22,
+                      //     // width: 200,
+                      //     child: Image.asset(
+                      //       'asset/linefix.png',
+                      //     ),
+                      //   ),
+                      // ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Column(
+                                  children: <Widget>[
+                                    Container(
+                                      height: SizeConfig.blockSizeVertical * 2,
                                     ),
-                                  ),
-                                  Container(
-                                    height: SizeConfig.blockSizeVertical * 1,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 7),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.lightBlue,
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                      height: SizeConfig.blockSizeVertical * 5,
-                                      width: SizeConfig.blockSizeHorizontal * 45,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 10),
-                                            child: Text(
-                                              'Store',
-                                              style: GoogleFonts.openSans(
-                                                  fontSize: 15,
-                                                  color: Colors.white),
-                                              textScaleFactor: 1,
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(right: 10),
-                                            child: Text(
-                                              '19%',
-                                              style: GoogleFonts.openSans(
-                                                  fontSize: 20,
-                                                  color: Colors.white),
-                                              textScaleFactor: 1,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    height: SizeConfig.blockSizeVertical * 1,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 7),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey[800],
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                      height: SizeConfig.blockSizeVertical * 5,
-                                      width: SizeConfig.blockSizeHorizontal * 45,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 10),
-                                            child: Text(
-                                              'PLN',
-                                              style: GoogleFonts.openSans(
-                                                  fontSize: 15,
-                                                  color: Colors.white),
-                                              textScaleFactor: 1,
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(right: 10),
-                                            child: Text(
-                                              '51%',
-                                              style: GoogleFonts.openSans(
-                                                  fontSize: 20,
-                                                  color: Colors.white),
-                                              textScaleFactor: 1,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    height: SizeConfig.blockSizeVertical * 7,
-                                  ),
-                                ],
-                              ),
-                              Container(
-                                width: SizeConfig.blockSizeHorizontal * 4,
-                              ),
-                              Column(
-                                children: <Widget>[
-                                  Container(
-                                    // decoration: BoxDecoration(color: Colors.green),
-                                    height: SizeConfig.blockSizeVertical * 1,
-                                    width: SizeConfig.blockSizeHorizontal * 1,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(5),
-                                    child: InkWell(
-                                      onTap: () async {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) => HomePage()));
-                                      },
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 7),
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          color: Colors.red,
+                                          color: Color.fromRGBO(36, 204, 51, 0.8),
                                           borderRadius: BorderRadius.circular(5),
                                         ),
-                                        height: SizeConfig.blockSizeVertical * 17.5,
+                                        height: SizeConfig.blockSizeVertical * 5,
                                         width: SizeConfig.blockSizeHorizontal * 45,
-                                        child: Column(
+                                        child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: <Widget>[
                                             Padding(
                                               padding:
-                                                  const EdgeInsets.only(top: 10),
+                                                  const EdgeInsets.only(left: 10),
                                               child: Text(
-                                                'Enjoy',
+                                                'Harvest',
                                                 style: GoogleFonts.openSans(
-                                                    fontSize: 21,
+                                                    fontSize: 15,
                                                     color: Colors.white),
                                                 textScaleFactor: 1,
                                               ),
                                             ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: <Widget>[
-                                                Padding(
-                                                  padding: const EdgeInsets.only(
-                                                      bottom: 10),
-                                                  child: Text(
-                                                    '20',
-                                                    style: GoogleFonts.openSans(
-                                                        fontSize: 23,
-                                                        color: Colors.white),
-                                                    textScaleFactor: 1,
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: const EdgeInsets.only(
-                                                      bottom: 10),
-                                                  child: Text(
-                                                    ' kwh',
-                                                    style: GoogleFonts.openSans(
-                                                        fontSize: 18,
-                                                        color: Colors.white),
-                                                    textScaleFactor: 1,
-                                                  ),
-                                                ),
-                                              ],
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.only(right: 10),
+                                              child: Text(
+                                                '30%',
+                                                style: GoogleFonts.openSans(
+                                                    fontSize: 20,
+                                                    color: Colors.white),
+                                                textScaleFactor: 1,
+                                              ),
                                             ),
                                           ],
-                                          // ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                    Container(
+                                      height: SizeConfig.blockSizeVertical * 1,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 7),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.lightBlue,
+                                          borderRadius: BorderRadius.circular(5),
+                                        ),
+                                        height: SizeConfig.blockSizeVertical * 5,
+                                        width: SizeConfig.blockSizeHorizontal * 45,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.only(left: 10),
+                                              child: Text(
+                                                'Store',
+                                                style: GoogleFonts.openSans(
+                                                    fontSize: 15,
+                                                    color: Colors.white),
+                                                textScaleFactor: 1,
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.only(right: 10),
+                                              child: Text(
+                                                '19%',
+                                                style: GoogleFonts.openSans(
+                                                    fontSize: 20,
+                                                    color: Colors.white),
+                                                textScaleFactor: 1,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      height: SizeConfig.blockSizeVertical * 1,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 7),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[800],
+                                          borderRadius: BorderRadius.circular(5),
+                                        ),
+                                        height: SizeConfig.blockSizeVertical * 5,
+                                        width: SizeConfig.blockSizeHorizontal * 45,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.only(left: 10),
+                                              child: Text(
+                                                'PLN',
+                                                style: GoogleFonts.openSans(
+                                                    fontSize: 15,
+                                                    color: Colors.white),
+                                                textScaleFactor: 1,
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.only(right: 10),
+                                              child: Text(
+                                                '51%',
+                                                style: GoogleFonts.openSans(
+                                                    fontSize: 20,
+                                                    color: Colors.white),
+                                                textScaleFactor: 1,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      height: SizeConfig.blockSizeVertical * 7,
+                                    ),
+                                  ],
+                                ),
+                                Container(
+                                  width: SizeConfig.blockSizeHorizontal * 4,
+                                ),
+                                Column(
+                                  children: <Widget>[
+                                    Container(
+                                      // decoration: BoxDecoration(color: Colors.green),
+                                      height: SizeConfig.blockSizeVertical * 1,
+                                      width: SizeConfig.blockSizeHorizontal * 1,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(5),
+                                      child: InkWell(
+                                        onTap: () async {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => HomePage()));
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.red,
+                                            borderRadius: BorderRadius.circular(5),
+                                          ),
+                                          height: SizeConfig.blockSizeVertical * 17.5,
+                                          width: SizeConfig.blockSizeHorizontal * 45,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: <Widget>[
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.only(top: 10),
+                                                child: Text(
+                                                  'Enjoy',
+                                                  style: GoogleFonts.openSans(
+                                                      fontSize: 21,
+                                                      color: Colors.white),
+                                                  textScaleFactor: 1,
+                                                ),
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: <Widget>[
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(
+                                                        bottom: 10),
+                                                    child: Text(
+                                                      '20',
+                                                      style: GoogleFonts.openSans(
+                                                          fontSize: 23,
+                                                          color: Colors.white),
+                                                      textScaleFactor: 1,
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(
+                                                        bottom: 10),
+                                                    child: Text(
+                                                      ' kwh',
+                                                      style: GoogleFonts.openSans(
+                                                          fontSize: 18,
+                                                          color: Colors.white),
+                                                      textScaleFactor: 1,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                            // ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+
+                        Container(
+                          child: Echarts(
+                            option: '''
+                      {
+                  animation:false,
+                  height:'$data_tinggi',
+                
+                  grid: {
+                           left: '0px',
+                          right: '0px',
+                         
+                          top:'0px'
+                        },
+                 
+                  xAxis: {
+                          type: 'category',
+
+                         
+                         
+                          show: false,                         
+                          },
+                  yAxis: {
+                      type: 'value',
+                      show: false,  
+                      max: 50,
+                 
+                      
+                     
+                          },
+
+                  series: [{
+                      
+                      data: $data2,
+                      type: 'bar',
+                      itemStyle: {color: '$green'},
+                      showBackground: true,
+                      backgroundStyle: {
+                          color: '#ffffff'
+                      }
+                      
+                  }]
+
+                }
+                
+                  ''',
                           ),
-                        ],
-                      ),
-
-                      Container(
-                        child: Echarts(
-                          option: '''
+                          width: widthbar,
+                          height: heightbar,
+                        ),
+                        Container(
+                          child: Echarts(
+                            option: '''
                     {
                 animation:false,
                 height:'$data_tinggi',
-              
-                grid: {
-                         left: '0px',
-                        right: '0px',
-                       
-                        top:'0px'
-                      },
-               
-                xAxis: {
-                        type: 'category',
-
-                       
-                       
-                        show: false,                         
-                        },
-                yAxis: {
-                    type: 'value',
-                    show: false,  
-                    max: 50,
-               
-                    
-                   
-                        },
-
-                series: [{
-                    
-                    data: $data2,
-                    type: 'bar',
-                    itemStyle: {color: '$green'},
-                    showBackground: true,
-                    backgroundStyle: {
-                        color: '#ffffff'
-                    }
-                    
-                }]
-
-              }
-              
-                ''',
-                        ),
-                        width: widthbar,
-                        height: heightbar,
-                      ),
-                      Container(
-                        child: Echarts(
-                          option: '''
-                  {
-              animation:false,
-              height:'$data_tinggi',
-              
-              grid: {
-                      left: '0px',
-                      right: '0px',
-                     
-                      top:'0px'
-                    },
-               
-              xAxis: {
-                      type: 'category',
-
-                     
-                     
-                      show: false,                         
-                      },
-              yAxis: {
-                  type: 'value',
-                  show: false,  
-                  inverse: false,
-                 
-                  
-                 
-                      },
-
-              series: [{
-                  
-                  data: $totalData,
-                  type: 'bar',
-                  itemStyle: {color: '$black'},
-                  showBackground: true,
-                  backgroundStyle: {
-                      color: '#ffffff'
-                  }
-                  
-              }]
-
-              }
-              
-              ''',
-                        ),
-                        width: widthbar,
-                        height: heightbar,
-                      ),
-                      Container(
-                        child: Echarts(
-                          option: '''
-                    {
-                animation:false,
-                height:'$data_tinggi',
-              
+                
                 grid: {
                         left: '0px',
                         right: '0px',
                        
                         top:'0px'
                       },
-               
+                 
                 xAxis: {
                         type: 'category',
 
@@ -615,7 +567,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 yAxis: {
                     type: 'value',
                     show: false,  
-                    inverse: true,
+                    inverse: false,
                    
                     
                    
@@ -625,7 +577,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     
                     data: $totalData,
                     type: 'bar',
-                    itemStyle: {color: '$red'},
+                    itemStyle: {color: '$black'},
                     showBackground: true,
                     backgroundStyle: {
                         color: '#ffffff'
@@ -633,72 +585,122 @@ class _MyHomePageState extends State<MyHomePage> {
                     
                 }]
 
-              }
-              
+                }
+                
                 ''',
+                          ),
+                          width: widthbar,
+                          height: heightbar,
                         ),
-                        width: widthbar,
-                        height: heightbar,
-                      ),
-                      Container(
-                        child: Echarts(
-                          option: '''
-                    {
-                animation:false,
-                height:'$data_tinggi',
-              
-                grid: {
-                        left: '0px',
-                        right: '0px',
-                        top:'0px'
-                      },
-               
-                xAxis: {
-                        type: 'category',
-
-                       
-                       
-                        show: false,                         
+                        Container(
+                          child: Echarts(
+                            option: '''
+                      {
+                  animation:false,
+                  height:'$data_tinggi',
+                
+                  grid: {
+                          left: '0px',
+                          right: '0px',
+                         
+                          top:'0px'
                         },
-                yAxis: {
-                    type: 'value',
-                    show: false,
-                    max: 50,  
-               
-                    
-                   
-                        },
+                 
+                  xAxis: {
+                          type: 'category',
 
-                series: [{
-                    
-                    data: $data1,
-                    type: 'bar',
-                    itemStyle: {color: '$blue'},
-                    showBackground: true,
-                    backgroundStyle: {
-                        color: '#ffffff'
-                    }
-                    
-                }]
+                         
+                         
+                          show: false,                         
+                          },
+                  yAxis: {
+                      type: 'value',
+                      show: false,  
+                      inverse: true,
+                     
+                      
+                     
+                          },
 
-              }
-              
-                ''',
+                  series: [{
+                      
+                      data: $totalData,
+                      type: 'bar',
+                      itemStyle: {color: '$red'},
+                      showBackground: true,
+                      backgroundStyle: {
+                          color: '#ffffff'
+                      }
+                      
+                  }]
+
+                }
+                
+                  ''',
+                          ),
+                          width: widthbar,
+                          height: heightbar,
                         ),
-                        width: widthbar,
-                        height: heightbar,
-                      ),
-                    ],
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      navButton(false),
-                      _buildGrapgh(),
-                    ],
-                  ),
-                ],
-              )
+                        Container(
+                          child: Echarts(
+                            option: '''
+                      {
+                  animation:false,
+                  height:'$data_tinggi',
+                
+                  grid: {
+                          left: '0px',
+                          right: '0px',
+                          top:'0px'
+                        },
+                 
+                  xAxis: {
+                          type: 'category',
+
+                         
+                         
+                          show: false,                         
+                          },
+                  yAxis: {
+                      type: 'value',
+                      show: false,
+                      max: 50,  
+                 
+                      
+                     
+                          },
+
+                  series: [{
+                      
+                      data: $data1,
+                      type: 'bar',
+                      itemStyle: {color: '$blue'},
+                      showBackground: true,
+                      backgroundStyle: {
+                          color: '#ffffff'
+                      }
+                      
+                  }]
+
+                }
+                
+                  ''',
+                          ),
+                          width: widthbar,
+                          height: heightbar,
+                        ),
+                      ],
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        navButton(false),
+                        // _buildGrapgh(),
+                      ],
+                    ),
+                  ],
+                ),
+            )
             : Stack(
                 children: <Widget>[
                   Column(
@@ -763,7 +765,7 @@ class _MyHomePageState extends State<MyHomePage> {
               energyTotal.add(snapshot.data[i]['energy_total'].toString());
             }
             totalData = energyTotal;
-            return Text("datax");
+            // return Text("datax");
             }
 
           });
