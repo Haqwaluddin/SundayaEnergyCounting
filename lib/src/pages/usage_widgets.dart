@@ -683,22 +683,63 @@ class UsageWidgets extends HomePage {
                 endIndent: SizeConfig.blockSizeVertical * 2,
               ),
             ),
-            Row(
-              children: <Widget>[
-                Container(
-                  width: SizeConfig.blockSizeHorizontal * 50,
-                ),
-                Text(
-                  timehour1.toString(),
-                  // DateTime.now().toString(),
-                  style: GoogleFonts.openSans(
-                    fontSize: 20,
+            (timehourstart.toString() != timehourend.toString())
+                ? Container(
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(
+                          SizeConfig.blockSizeHorizontal * 25,
+                          0,
+                          SizeConfig.blockSizeHorizontal * 4,
+                          0),
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: Container(
+                              child: Text(
+                                timehourstart.toString(),
+                                style: GoogleFonts.openSans(
+                                  fontSize: 16,
+                                ),
+                                textScaleFactor: 1,
+                              ),
+                            ),
+                            flex: 1,
+                          ),
+                          Expanded(
+                            child: Container(
+                              child: Align(
+                                child: Text(
+                                  timehourend.toString(),
+                                  style: GoogleFonts.openSans(
+                                    fontSize: 16,
+                                  ),
+                                  textScaleFactor: 1,
+                                ),
+                                alignment: Alignment.centerRight,
+                              ),
+                            ),
+                            flex: 1,
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                : Row(
+                    children: <Widget>[
+                      Container(
+                        width: SizeConfig.blockSizeHorizontal * 50,
+                      ),
+                      Text(
+                        timehourend.toString(),
+                        // DateTime.now().toString(),
+                        style: GoogleFonts.openSans(
+                          fontSize: 20,
+                        ),
+                        textScaleFactor: 1,
+                      ),
+                      // Text(timeweekstart.toString())
+                    ],
                   ),
-                  textScaleFactor: 1,
-                ),
-                // Text(timeweekstart.toString())
-              ],
-            ),
           ],
         ),
       ],

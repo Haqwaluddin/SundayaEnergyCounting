@@ -109,7 +109,8 @@ String timeDisplayStart,
     timestarthour,
     timeendhour,
     timehour,
-    timehour1;
+    timehourstart,
+    timehourend;
 
 List timeweeklist = [], timedaylist = [], timehourlist = [];
 
@@ -572,8 +573,12 @@ class _HomePageState extends State<HomePage> {
         timehour = data1;
         timehour = DateFormat('Hm').format(DateTime.parse(timehour));
 
-        timehour1 = data1;
-        timehour1 = DateFormat('yMMMMd').format(DateTime.parse(timehour1));
+        timehourstart = data1;
+        timehourstart =
+            DateFormat('yMMMMd').format(DateTime.parse(timehourstart));
+
+        timehourend = data2;
+        timehourend = DateFormat('yMMMMd').format(DateTime.parse(timehourend));
 
         DateTime endDate;
         if (changeDataPeriodic == 0) {
@@ -762,8 +767,11 @@ class _HomePageState extends State<HomePage> {
     timehour = timeDisplayStart;
     timehour = DateFormat('Hm').format(DateTime.parse(timehour));
 
-    timehour1 = timeDisplayStart;
-    timehour1 = DateFormat('yMMMMd').format(DateTime.parse(timehour1));
+    timehourstart = timeDisplayStart;
+    timehourstart = DateFormat('yMMMMd').format(DateTime.parse(timehourstart));
+
+    timehourend = timeDisplayEnd;
+    timehourend = DateFormat('yMMMMd').format(DateTime.parse(timehourend));
 
     setState(() {});
   }
