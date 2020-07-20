@@ -143,8 +143,12 @@ class DBProvider {
 
       res = await db.insert('daily', newEmployee.toJson(),
           conflictAlgorithm: ConflictAlgorithm.ignore);
+    } else if (dbName == "month") {
+
+      res = await db.insert('month', newEmployee.toJson(),
+          conflictAlgorithm: ConflictAlgorithm.ignore);
     }
-    storeDB = "Action di Databse : " + res.toString();
+    storeDB = "Action di Database : " + res.toString();
     dbName = dbName;
     returnDB();
     getDBName();
@@ -176,7 +180,7 @@ class DBProvider {
         db = await database;
       } else if (changeDataPeriodic == 1) {
         db = await databaseHour;
-        print("databse jam");
+        print("database jam");
       }
 
       final res =

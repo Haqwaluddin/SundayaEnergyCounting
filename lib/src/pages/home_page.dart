@@ -10,6 +10,7 @@ import 'package:zoom_get_coordinate/src/function/getDateTime.dart';
 import 'package:zoom_get_coordinate/src/function/storage.dart';
 import 'package:zoom_get_coordinate/src/function/toastInformation.dart';
 import 'package:zoom_get_coordinate/src/pages/downloadpage.dart';
+import 'package:zoom_get_coordinate/src/pages/usage_widgets.dart';
 import 'package:zoom_get_coordinate/src/providers/db_provider.dart';
 import 'package:zoom_get_coordinate/src/providers/employee_api_provider.dart';
 import 'package:flutter/material.dart';
@@ -22,20 +23,19 @@ import 'package:screen/screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-
 String DataStop = "20200428T110000";
 String DataStop1 = ""; //20200414T160000
 var GeserStatus = false;
-var DateLimit = false;
+var dateLimit = false;
 
-String dataQuery = //"";
-    // "SELECT * FROM EMPLOYEE"; //'SELECT * FROM EMPLOYEE WHERE time_stamp BETWEEN "20200428T000000" AND "20200428T010000"';
-    'SELECT * FROM minutes WHERE time_stamp BETWEEN "20200429T000000" AND "20200430T000000"';
+String dataQuery; //"";
+// "SELECT * FROM EMPLOYEE"; //'SELECT * FROM EMPLOYEE WHERE time_stamp BETWEEN "20200428T000000" AND "20200428T010000"';
+// 'SELECT * FROM minutes WHERE time_stamp BETWEEN "20200429T000000" AND "20200430T000000"';
 
 String mulai;
 String akhir;
 
-String Qmulai, Qakhir;
+String qMulai, qAkhir;
 
 int counter = 1;
 
@@ -45,8 +45,8 @@ List<String> titles = [
   'Phasa C',
 ];
 
-int data_tinggi = 60;
-int data_lebar = 200;
+int dataTinggi = 60;
+int dataLebar = 200;
 
 var red = "#db0202";
 var data2 = new List();
@@ -59,41 +59,20 @@ var StatusStartScale = false;
 
 // ==================== scALE========================//
 
-int AddManual = 0;
-int AddManualLeft = 1;
+int addManual = 0;
+int addManualLeft = 1;
+double stackHour = 3;
 
-int _downCounter = 0;
-int _upCounter = 0;
 double x = 0.0;
 double y = 0.0;
 
-
-
 var blue = "#059AFF";
 
-var touch1 = 0, touch2 = 0;
-var dataTouch = [0.0, 0.0];
-var statusTouch1 = false, statusTouch2 = false;
-var result = [0.0, 0.0];
-int datat1l, datat2l;
-int dataC = 0, cs = 0;
-// int distance = 0;
-List<int> dataTouchInt = [0, 0];
-
-List<int> deltaTouch = [0, 0];
-
-var mode = ["Stanby", "Drag 1", "Zoom"];
-var selectMode = "Stanby";
-
-var gKanan = false, gKiri = false;
-
 //untuk timer
-
 bool isStopped = false;
 
 int durationTimeGraph = 1100;
-var max_data = "500626970";
-
+var maxData = "500626970";
 // untuk timer
 
 bool stateData = false;
@@ -104,34 +83,44 @@ String label2 = " no data";
 var iconStatus = Icons.warning;
 var colorStatus = Colors.red;
 
-// data periodic //
-
+// start data periodic //
 var dataPeriodic = ["Hour", "Day", "Week", "Month", "year"];
 var arrayDB = ['minutes', 'hourly', 'daily', 'month', 'year'];
 int changeDataPeriodic = 0;
+// end data periodic //
 
-// data periodic //
-
-//load api json
-
+// start load api json //
 var dataCounterApi = 0;
-
-//load api json
+// end load api json //
 
 String timer = "menit";
 
-String timeDisplayStart, timeDisplayEnd, timestartweek,timestartweek1,timeendweek,timeweek, timestartday,timeendday,timeday, timestarthour,timeendhour,timehour,timehour1;
+String timeDisplayStart,
+    timeDisplayEnd,
+    timestartweek,
+    timestartweek1,
+    timeendweek,
+    timeweekstart,
+    timeweekend,
+    timestartday,
+    timeendday,
+    timedaystart,
+    timedayend,
+    timestarthour,
+    timeendhour,
+    timehour,
+    timehour1;
+
+List timeweeklist = [], timedaylist = [], timehourlist = [];
 
 bool statusMinutes = false;
 
 var maxGrap = 0.0;
 
-
 //-------//
 var dt = DateTime.now();
 var newDt = DateFormat.yMMMEd().format(dt);
 var dtweek = DateFormat.yMMMM().format(dt);
-
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key}) : super(key: key);
@@ -143,7 +132,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   var isLoading = false;
   int a = 0;
-  int GestureLeft, GestureRight, ValueData, ValueStart;
 
   void tambah() {
     counter++;
@@ -154,53 +142,27 @@ class _HomePageState extends State<HomePage> {
     setState(() {});
   }
 
-  Widget buildTextLog(String logFile) {
+  @override
+  void initState() {
+    Screen.keepOn(true);
+    statusMinutes = true;
+    _timerRoutine();
 
-    return Text(logFile);
-  }
+    _CheckLastDB();
 
-  Widget buildTopbutton(String buttonText) {
-    return FlatButton(
-        child: Text(buttonText,
-            textScaleFactor: 1.0,
-            style: TextStyle(fontSize: 10.0, color: Colors.white)),
-        shape: RoundedRectangleBorder(
-            borderRadius: new BorderRadius.circular(10.0),
-            side: BorderSide(color: Colors.white)),
-        onPressed: () async {
-
-          String db = buttonText;
-          if (buttonText == "minutes") {
-            changeDataPeriodic = 0;
-            buttonText = "5minutes";
-          }
-
-          if (buttonText == "hourly") {
-            changeDataPeriodic = 1;
-
-          }
-
-          if (buttonText == "daily") {
-            changeDataPeriodic = 2;
-
-          }
-
-          changeQuery1("", "");
-
-        });
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-
       backgroundColor: Colors.white,
       body: !stateData
           ? Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Center(   
+                Center(
                   // child: CircularProgressIndicator(),
                   child: SpinKitWave(
                     color: Colors.blue,
@@ -219,32 +181,26 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             )
-          : SafeArea(child: Column(
+          : SafeArea(
+              child: Column(
                 children: <Widget>[
                   Container(
-                    height: SizeConfig.blockSizeVertical*30,
+                      height: SizeConfig.blockSizeVertical * 37,
                       child: Center(
-                    child: _buildEmployeeListView(),
-                  )),
-                Container(
-                  height: SizeConfig.blockSizeVertical*1,
-                ), 
-
-                Container(
-                  child: selectTime(dataPeriodic[changeDataPeriodic]),
-                ),
-
-
-            Expanded(
-              child: Text('')),
-
+                        child: _buildEmployeeListView(),
+                      )),
+                  Container(
+                    height: SizeConfig.blockSizeVertical * 1,
+                  ),
+                  Container(
+                    child: selectTime(dataPeriodic[changeDataPeriodic]),
+                  ),
+                  Expanded(child: Text('')),
                   Center(
                     child: Card(
                       child: ListTile(
-                        leading: IconButton(icon: Icon(Icons.delete), onPressed: (){
-                          
-                        })
-                      ),
+                          leading: IconButton(
+                              icon: Icon(Icons.delete), onPressed: () {})),
                     ),
                   ),
                   Center(
@@ -269,11 +225,12 @@ class _HomePageState extends State<HomePage> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
                             Text(
-                              timeDisplayStart.toString(),
+                              dateToStr(timeDisplayStart).toString(),
                               style: TextStyle(color: Colors.black),
                             ),
                             Text(
-                              timeDisplayEnd.toString(),
+                              // timeDisplayEnd.toString(),
+                              dateToStr(timeDisplayEnd).toString(),
                               style: TextStyle(color: Colors.black),
                             ),
                           ],
@@ -288,405 +245,44 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
               ),
-          ),
+            ),
     );
   }
 
-selectTime(String periodic){
-
-  if (periodic == "Week") {
-    // timestampday();
-    return 
-                Column(
-                  children: <Widget>[
-                    Row(children: <Widget>[
-                      Container(
-                        width: SizeConfig.blockSizeHorizontal*28.5,
-                      ),
-                              Column(
-                                children: <Widget>[
-                                  Text(timestartweek.toString()),
-                                  Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                                ],
-                              ),
-
-                            // Container(
-                            //   width: SizeConfig.blockSizeHorizontal*4,
-                            // ),
-
-                            //  Column(
-                            //    children: <Widget>[
-                            //      Text(timestartweek1+1.toString()),
-                            //      Container(
-                            //       color: Colors.black,
-                            //       child: VerticalDivider(
-                            //         width: SizeConfig.blockSizeHorizontal*0.5,
-                            //         indent: 10,
-                            //         endIndent: 15,
-                            //       ),
-                            // ),
-                            //    ],
-                            //  ),
-
-                            Container(
-                              width: SizeConfig.blockSizeHorizontal*56.8,
-                            ),
-
-                             Column(
-                               children: <Widget>[
-                                 Text(timeendweek.toString()),
-                                 Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                               ],
-                             ),
-                                                       
-                    ],
-                    ),
-                 
-
-                 Column(
-             children: <Widget>[
-               Container(
-                 child: Divider(color: Colors.black,
-                 height: SizeConfig.blockSizeVertical*0.2,
-                  thickness: SizeConfig.blockSizeHorizontal*0.5,
-                  indent: SizeConfig.blockSizeHorizontal*30,
-                  endIndent: SizeConfig.blockSizeVertical*4.5,
-                  ),
-                ),
-
-                 Row(
-                   children: <Widget>[
-                    Container(
-                      width: SizeConfig.blockSizeHorizontal*50,
-                    ), 
-                    Text(
-                                timeweek.toString(),
-                                // DateTime.now().toString(),
-                                style: GoogleFonts.openSans(
-                                  fontSize: 20,
-                                ),
-                                textScaleFactor: 1,
-                              ),
-
-                              // Text(timeweek.toString())
-                   ],
-                 ), 
-             ],
-         ),
-          ],
-                );
-    
-  }
-  else if(periodic == "Day"){
-    return 
-                Column(
-                  children: <Widget>[
-                    Row(children: <Widget>[
-                      Container(
-                        width: SizeConfig.blockSizeHorizontal*23.5,
-                      ),
-                              Column(
-                                children: <Widget>[
-                                  Text(timestartday.toString()),
-                                  Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                                ],
-                              ),
-
-                            Container(
-                              width: SizeConfig.blockSizeHorizontal*67,
-                            ),
-
-                             Column(
-                               children: <Widget>[
-                                 Text(timeendday.toString()),
-                                 Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                               ],
-                             ),
-                            ],
-                    ),
-                 
-
-                 Column(
-             children: <Widget>[
-               Container(
-                 child: Divider(color: Colors.black,
-                 height: SizeConfig.blockSizeVertical*0.2,
-                  thickness: SizeConfig.blockSizeHorizontal*0.5,
-                  indent: SizeConfig.blockSizeHorizontal*25,
-                  endIndent: SizeConfig.blockSizeVertical*2,
-                  ),
-                ),
-
-                 Row(
-                   children: <Widget>[
-                    Container(
-                      width: SizeConfig.blockSizeHorizontal*50,
-                    ), 
-                     Text(
-                                timeday.toString(),
-                                // DateTime.now().toString(),
-                                style: GoogleFonts.openSans(
-                                  fontSize: 20,
-                                ),
-                                textScaleFactor: 1,
-                              ),
-                   ],
-                 ), 
-             ],
-         ),
-          ],
-                );
-
+  Widget buildTextLog(String logFile) {
+    return Text(logFile);
   }
 
-  else if(periodic == "Hour"){
-    return 
-                Column(
-                  children: <Widget>[
-                    Row(children: <Widget>[
-                      Container(
-                        width: SizeConfig.blockSizeHorizontal*25.5,
-                      ),
-                              Column(
-                                children: <Widget>[
-                                  Text(timestarthour.toString()),
-                                  Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                                ],
-                              ),
+  Widget buildTopbutton(String buttonText) {
+    return FlatButton(
+      child: Text(
+        buttonText,
+        textScaleFactor: 1.0,
+        style: TextStyle(fontSize: 10.0, color: Colors.white),
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: new BorderRadius.circular(10.0),
+        side: BorderSide(color: Colors.white),
+      ),
+      onPressed: () async {
+        String db = buttonText;
+        if (buttonText == "minutes") {
+          changeDataPeriodic = 0;
+          buttonText = "5minutes";
+        }
 
-                            Container(
-                              width: SizeConfig.blockSizeHorizontal*63,
-                            ),
+        if (buttonText == "hourly") {
+          changeDataPeriodic = 1;
+        }
 
-                             Column(
-                               children: <Widget>[
-                                 Text(timeendhour.toString()),
-                                 Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                               ],
-                             ),
-                            
-                    ],
-                    ),
-                 
+        if (buttonText == "daily") {
+          changeDataPeriodic = 2;
+        }
 
-                 Column(
-             children: <Widget>[
-               Container(
-                 child: Divider(color: Colors.black,
-                 height: SizeConfig.blockSizeVertical*0.2,
-                  thickness: SizeConfig.blockSizeHorizontal*0.5,
-                  indent: SizeConfig.blockSizeHorizontal*27,
-                  endIndent: SizeConfig.blockSizeVertical*3,
-                  ),
-                ),
-
-                 Row(
-                   children: <Widget>[
-                    Container(
-                      width: SizeConfig.blockSizeHorizontal*40,
-                    ), 
-                     Text(
-                                timehour1.toString(),
-                                // DateTime.now().toString(),
-                                style: GoogleFonts.openSans(
-                                  fontSize: 20,
-                                ),
-                                textScaleFactor: 1,
-                              ),
-                      Container(
-                        width: SizeConfig.blockSizeHorizontal*2,
-                      ),        
-                    //  Text(
-                    //             timehour.toString(),
-                    //             // DateTime.now().toString(),
-                    //             style: GoogleFonts.openSans(
-                    //               fontSize: 20,
-                    //             ),
-                    //             textScaleFactor: 1,
-                    //           ),
-                   ],
-                 ), 
-             ],
-         ),
-          ],
-                );
-    
+        changeQuery1("", "");
+      },
+    );
   }
-  else{}
-
-}
-
-Widget timestampday (){
-              return 
-                Column(
-                  children: <Widget>[
-                    Row(children: <Widget>[
-                      Container(
-                        width: SizeConfig.blockSizeHorizontal*23.5,
-                      ),
-                              Column(
-                                children: <Widget>[
-                                  Text(' 9 '),
-                                  Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                                ],
-                              ),
-
-                            Container(
-                              width: SizeConfig.blockSizeHorizontal*14.5,
-                            ),
-
-                             Column(
-                               children: <Widget>[
-                                 Text('15'),
-                                 Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                               ],
-                             ),
-                            
-                            Container(
-                              width: SizeConfig.blockSizeHorizontal*14.5,
-                            ),
-
-                             Column(
-                               children: <Widget>[
-                                 Text('21'),
-                                 Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                               ],
-                             ),
-                            
-                            Container(
-                              width: SizeConfig.blockSizeHorizontal*14,
-                            ),
-
-                             Column(
-                               children: <Widget>[
-                                 Text(' 4 '),
-                                 Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                               ],
-                             ),
-
-                            Container(
-                              width: SizeConfig.blockSizeHorizontal*14,
-                            ),
-
-                             Column(
-                               children: <Widget>[
-                                 Text('9'),
-                                 Container(
-                                  color: Colors.black,
-                                  child: VerticalDivider(
-                                    width: SizeConfig.blockSizeHorizontal*0.5,
-                                    indent: 10,
-                                    endIndent: 15,
-                                  ),
-                            ),
-                               ],
-                             ),                            
-                    ],
-                    ),
-                 
-
-                 Column(
-             children: <Widget>[
-               Container(
-                 child: Divider(color: Colors.black,
-                 height: SizeConfig.blockSizeVertical*0.2,
-                  thickness: SizeConfig.blockSizeHorizontal*0.5,
-                  indent: SizeConfig.blockSizeHorizontal*25,
-                  endIndent: SizeConfig.blockSizeVertical*2,
-                  ),
-                ),
-
-                 Row(
-                   children: <Widget>[
-                    Container(
-                      width: SizeConfig.blockSizeHorizontal*40,
-                    ), 
-                     Text(
-                                '$newDt',
-                                // DateTime.now().toString(),
-                                style: GoogleFonts.openSans(
-                                  fontSize: 20,
-                                ),
-                                textScaleFactor: 1,
-                              ),
-                   ],
-                 ), 
-             ],
-         ),
-          ],
-                );
-}
-
 
   Widget buildNavigator(bool nav) {
     if (nav) {
@@ -698,7 +294,6 @@ Widget timestampday (){
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 Container(
-
                   child: Card(
                     child: IconButton(
                         icon: Icon(Icons.keyboard_arrow_left),
@@ -719,14 +314,15 @@ Widget timestampday (){
                             highlightColor: Colors.grey,
                             onPressed: () {
                               setState(() {
-                                AddManualLeft++;
-                                // if (AddManualLeft > 24) AddManualLeft = 24;
+                                addManualLeft++;
+                                stackHour = stackHour * 2;
+                                // if (addManualLeft > 24) addManualLeft = 24;
                                 changeQuery1("data1", "data2");
                               });
                             }),
                       ),
                       Text(
-                        AddManualLeft.toString(),
+                        addManualLeft.toString(),
                         style: GoogleFonts.openSans(
                           textStyle: TextStyle(
                             fontSize: 20,
@@ -740,66 +336,71 @@ Widget timestampday (){
                             highlightColor: Colors.grey,
                             onPressed: () {
                               setState(() {
-                                //AddManualLeft = 0;
-                                AddManualLeft--;
-                                if (AddManualLeft < 1) AddManualLeft = 1;
+                                //addManualLeft = 0;
+                                addManualLeft--;
+                                if (addManualLeft < 1) addManualLeft = 1;
+                                (addManualLeft == 1)
+                                    ? stackHour = 3.0
+                                    : stackHour = (stackHour / 2);
                                 changeQuery1("data1", "data2");
-                                // AddManual = 0;
+                                // addManual = 0;
                               });
                             }),
                       ),
                     ],
                   ),
                 ),
-                Container(
-                  // padding: EdgeInsets.all(10),
-                  child: Column(
-                    children: <Widget>[
-                      Card(
-                        child: IconButton(
-                            icon: Icon(Icons.keyboard_arrow_up),
-                            highlightColor: Colors.red,
-                            onPressed: () {
-                              // _checkMaxdb(arrayDB[changeDataPeriodic]);
-                              changeDataPeriodic++;
-                              if (changeDataPeriodic >
-                                  dataPeriodic.length - 1) {
-                                changeDataPeriodic = dataPeriodic.length - 1;
-                              }
+                // Container(
+                //   // padding: EdgeInsets.all(10),
+                //   child: Column(
+                //     children: <Widget>[
+                //       Card(
+                //         child: IconButton(
+                //             icon: Icon(Icons.keyboard_arrow_up),
+                //             highlightColor: Colors.red,
+                //             onPressed: () {
+                //               // _checkMaxdb(arrayDB[changeDataPeriodic]);
+                //               changeDataPeriodic++;
+                //               if (changeDataPeriodic >
+                //                   dataPeriodic.length - 1) {
+                //                 changeDataPeriodic = dataPeriodic.length - 1;
+                //               }
+                //               print("changeDataPeriodic " +
+                //                   changeDataPeriodic.toString());
 
-                              setState(() {
-                                changeQuery1("data1", "data2");
-                              });
-                            }),
-                      ),
-                      Text(
-                        dataPeriodic[changeDataPeriodic],
-                        style: GoogleFonts.openSans(
-                          textStyle: TextStyle(
-                            fontSize: 20,
-                          ),
-                        ),
-                        textScaleFactor: 1,
-                      ),
-                      Card(
-                        child: IconButton(
-                            icon: Icon(Icons.keyboard_arrow_down),
-                            highlightColor: Colors.red,
-                            onPressed: () {
-                              // _checkMaxdb(arrayDB[changeDataPeriodic]);
+                //               setState(() {
+                //                 changeQuery1("data1", "data2");
+                //               });
+                //             }),
+                //       ),
+                //       Text(
+                //         dataPeriodic[changeDataPeriodic],
+                //         style: GoogleFonts.openSans(
+                //           textStyle: TextStyle(
+                //             fontSize: 20,
+                //           ),
+                //         ),
+                //         textScaleFactor: 1,
+                //       ),
+                //       Card(
+                //         child: IconButton(
+                //             icon: Icon(Icons.keyboard_arrow_down),
+                //             highlightColor: Colors.red,
+                //             onPressed: () {
+                //               // _checkMaxdb(arrayDB[changeDataPeriodic]);
 
-                              changeDataPeriodic--;
-                              if (changeDataPeriodic < 0) {
-                                changeDataPeriodic = 0;
-                              }
-                              setState(() {
-                                changeQuery1("data1", "data2");
-                              });
-                            }),
-                      ),
-                    ],
-                  ),
-                ),
+                //               changeDataPeriodic--;
+                //               if (changeDataPeriodic < 0) {
+                //                 changeDataPeriodic = 0;
+                //               }
+                //               setState(() {
+                //                 changeQuery1("data1", "data2");
+                //               });
+                //             }),
+                //       ),
+                //     ],
+                //   ),
+                // ),
                 Container(
                   // padding: EdgeInsets.all(15),
                   child: Card(
@@ -824,7 +425,29 @@ Widget timestampday (){
     }
   }
 
+  selectTime(String periodic) {
+    if (periodic == "Week") {
+      return UsageWidgets().weekPeriodic();
+    } else if (periodic == "Day") {
+      return UsageWidgets().dayPeriodic();
+    } else if (periodic == "Hour") {
+      return UsageWidgets().hourPeriodic();
+    } else {}
+  }
+
   changeQuery1(String data1, String data2) async {
+    var hourToDays = stackHour / 24;
+    if (stackHour < 24) {
+      changeDataPeriodic = 0;
+    } else if (hourToDays < 32) {
+      changeDataPeriodic = 1;
+    } else if (hourToDays < 512) {
+      changeDataPeriodic = 2;
+    } else if (hourToDays >= 512) {
+      changeDataPeriodic = 3;
+    } else {}
+    print("Stack Hour " + stackHour.toString());
+
     var dataq = await loadlast(arrayDB[changeDataPeriodic]);
     print("Last DB Query : " +
         dataq.toString() +
@@ -835,23 +458,26 @@ Widget timestampday (){
     if (dataq != null) {
       stateData = true;
       try {
-
         tempDate = DateTime.parse(dataq.toString().split(".")[0].toString());
 
         stateData = true;
 
         var fiftyDaysFromNow;
-
+        print("tempDate : " + tempDate.toString());
         if (changeDataPeriodic == 0) {
-          fiftyDaysFromNow = tempDate.add(new Duration(hours: -AddManualLeft));
+          // fiftyDaysFromNow = tempDate.add(new Duration(hours: -addManualLeft));
+          fiftyDaysFromNow =
+              tempDate.add(new Duration(hours: -stackHour.round()));
         } else if (changeDataPeriodic == 1) {
           fiftyDaysFromNow =
-              tempDate.add(new Duration(hours: -AddManualLeft * 24));
+              tempDate.add(new Duration(hours: -stackHour.round()));
         } else if (changeDataPeriodic == 2) {
           fiftyDaysFromNow =
-              tempDate.add(new Duration(days: -AddManualLeft * 7));
-        }
+              tempDate.add(new Duration(days: -hourToDays.round()));
+        } else if (changeDataPeriodic == 3) {
+          // fiftyDaysFromNow
 
+        }
 
         var format = DateFormat('yyyyMMddTkk0000')
             .format(fiftyDaysFromNow)
@@ -881,16 +507,19 @@ Widget timestampday (){
         // dataa = format.replaceAll("T24", "T00");
         // format = DateFormat('d').format(tempDate).toString();
 
-        print(data1);
-        print(data2);
+        print("start date " + data1);
+        print(" end date " + data2);
         // print(dataa);
-        
 
         timeDisplayStart = data1;
         timeDisplayEnd = data2;
 
         timestartweek = data1;
         timestartweek = DateFormat('dd').format(DateTime.parse(timestartweek));
+        if (changeDataPeriodic == 2) {
+          timeweeklist =
+              getDaysInBetween(DateTime.parse(data1), DateTime.parse(data2));
+        }
 
         // timestartweek1 = data1;
         // timestartweek1 = DateFormat('dd').format(DateTime.parse(timestartweek));
@@ -899,30 +528,43 @@ Widget timestampday (){
         timeendweek = data2;
         timeendweek = DateFormat('dd').format(DateTime.parse(timeendweek));
 
-        timeweek = data1;
-        timeweek = DateFormat('yMMM').format(DateTime.parse(timeweek));
+        timeweekstart = data1;
+        timeweekstart = DateFormat('yMMM').format(DateTime.parse(timeweekstart));
+
+        timeweekend = data2;
+        timeweekend = DateFormat('yMMM').format(DateTime.parse(timeweekend));
 
         timestartday = data1;
         timestartday = DateFormat('dd').format(DateTime.parse(timestartday));
+        if (changeDataPeriodic == 1) {
+          timedaylist =
+              getDaysInBetween(DateTime.parse(data1), DateTime.parse(data2));
+        }
 
         timeendday = data2;
         timeendday = DateFormat('dd').format(DateTime.parse(timeendday));
 
-        timeday = data1;
-        timeday = DateFormat('yMMM').format(DateTime.parse(timeday));
+        timedayend = data2;
+        timedayend = DateFormat('yMMM').format(DateTime.parse(timedayend));
+
+        timedaystart = data1;
+        timedaystart = DateFormat('yMMM').format(DateTime.parse(timedaystart));
 
         timestarthour = data1;
         timestarthour = DateFormat('kk').format(DateTime.parse(timestarthour));
+        if (changeDataPeriodic == 0) {
+          timehourlist =
+              getHoursInBetween(DateTime.parse(data1), DateTime.parse(data2));
+        }
 
         timeendhour = data2;
         timeendhour = DateFormat('kk').format(DateTime.parse(timeendhour));
-        
+
         timehour = data1;
         timehour = DateFormat('Hm').format(DateTime.parse(timehour));
-        
+
         timehour1 = data1;
         timehour1 = DateFormat('yMMMMd').format(DateTime.parse(timehour1));
-
 
         DateTime endDate;
         if (changeDataPeriodic == 0) {
@@ -932,19 +574,19 @@ Widget timestampday (){
         }
         timeStartFormat =
             new DateFormat('yyyy-MM-dd kk:mm:00').format(endDate).toString();
-        Qakhir = timeStartFormat.toString();
+        qAkhir = timeStartFormat.toString();
         print("end : " + timeStartFormat.toString());
         String inputQuery = "minutes";
         if (changeDataPeriodic == 1) {
-          max_data = "30084800";
+          maxData = "30084800";
           inputQuery = "hourly";
         }
         if (changeDataPeriodic == 0) {
-          max_data = "7519920";
+          maxData = "7519920";
           inputQuery = "minutes";
         }
         if (changeDataPeriodic == 2) {
-          max_data = "500626970";
+          maxData = "500626970";
           //"112626970"
           inputQuery = "daily";
         }
@@ -956,7 +598,6 @@ Widget timestampday (){
       } catch (e) {
         print("eror : " + e.toString());
       }
-
     } else {}
   }
 
@@ -984,19 +625,31 @@ Widget timestampday (){
   }
 
   queryAll(String button) {
-
     String db;
     String value;
 
     print("data periodic :  " + dataPeriodic[changeDataPeriodic].toString());
+    print(" timeDisplayStart " + timeDisplayStart);
+    print(" timeDisplayEnd " + timeDisplayEnd);
+
+    var hourToDays = stackHour / 24;
+    if (stackHour < 24) {
+      changeDataPeriodic = 0;
+    } else if (hourToDays < 32) {
+      changeDataPeriodic = 1;
+    } else if (hourToDays < 512) {
+      changeDataPeriodic = 2;
+    } else if (hourToDays >= 512) {
+      changeDataPeriodic = 3;
+    } else {}
 
     if (dataPeriodic[changeDataPeriodic].toString() == "Hour") {
       print("select hour");
 
       if (button == "left") {
-        value = minutecalculate((1), timeDisplayStart, timeDisplayEnd);
+        value = minutecalculate((stackHour.round()), timeDisplayStart, timeDisplayEnd);
       } else if (button == "right") {
-        value = minutecalculate((-1), timeDisplayStart, timeDisplayEnd);
+        value = minutecalculate((-stackHour.round()), timeDisplayStart, timeDisplayEnd);
       }
 
       db = "minutes";
@@ -1004,25 +657,30 @@ Widget timestampday (){
 
     if (dataPeriodic[changeDataPeriodic].toString() == "Day") {
       print("select Day");
-
       if (button == "left") {
-        value = daycalculate((1), timeDisplayStart, timeDisplayEnd);
+        value = daycalculate((hourToDays.round()), timeDisplayStart, timeDisplayEnd);
       } else if (button == "right") {
-        value = daycalculate((-1), timeDisplayStart, timeDisplayEnd);
+        value = daycalculate((-hourToDays.round()), timeDisplayStart, timeDisplayEnd);
       }
-
       db = "hourly";
     }
 
-    if (changeDataPeriodic == 2) {
-
+    if (dataPeriodic[changeDataPeriodic].toString() == "Week") {
       if (button == "left") {
-        value = datecalculate(7, timeDisplayStart, timeDisplayEnd);
+        value = daycalculate(hourToDays.round(), timeDisplayStart, timeDisplayEnd);
       } else if (button == "right") {
-        value = datecalculate(-7, timeDisplayStart, timeDisplayEnd);
+        value = daycalculate(-hourToDays.round(), timeDisplayStart, timeDisplayEnd);
       }
-
       db = "daily";
+    }
+
+    if (dataPeriodic[changeDataPeriodic].toString() == "Month") {
+      if (button == "left") {
+        value = daycalculate(hourToDays.round(), timeDisplayStart, timeDisplayEnd);
+      } else if (button == "right") {
+        value = daycalculate(hourToDays.round(), timeDisplayStart, timeDisplayEnd);
+      }
+      db = "month";
     }
 
     String start = value.split(" ")[0];
@@ -1043,41 +701,40 @@ Widget timestampday (){
           'SELECT * FROM $db WHERE time_stamp BETWEEN "$start" AND "$end"';
     }
 
-        timestartweek = timeDisplayStart;
-        timestartweek = DateFormat('dd').format(DateTime.parse(timestartweek));
+    timestartweek = timeDisplayStart;
+    timestartweek = DateFormat('dd').format(DateTime.parse(timestartweek));
 
-        timeendweek = timeDisplayEnd;
-        timeendweek = DateFormat('dd').format(DateTime.parse(timeendweek));
+    timeendweek = timeDisplayEnd;
+    timeendweek = DateFormat('dd').format(DateTime.parse(timeendweek));
 
-        timeweek = timeDisplayStart;
-        timeweek = DateFormat('yMMM').format(DateTime.parse(timeweek));
+    timeweekstart = timeDisplayStart;
+    timeweekstart = DateFormat('yMMM').format(DateTime.parse(timeweekstart));
 
-        timestartday = timeDisplayStart;
-        timestartday = DateFormat('dd').format(DateTime.parse(timestartday));
+    timestartday = timeDisplayStart;
+    timestartday = DateFormat('dd').format(DateTime.parse(timestartday));
 
-        timeendday = timeDisplayEnd;
-        timeendday = DateFormat('dd').format(DateTime.parse(timeendday));
+    timeendday = timeDisplayEnd;
+    timeendday = DateFormat('dd').format(DateTime.parse(timeendday));
 
-        timeday = timeDisplayStart;
-        timeday = DateFormat('yMMM').format(DateTime.parse(timeday));
+    timedayend = timeDisplayStart;
+    timedayend = DateFormat('yMMM').format(DateTime.parse(timedayend));
 
-        timestarthour = timeDisplayStart;
-        timestarthour = DateFormat('kk').format(DateTime.parse(timestarthour));
+    timestarthour = timeDisplayStart;
+    timestarthour = DateFormat('kk').format(DateTime.parse(timestarthour));
 
-        timeendhour = timeDisplayEnd;
-        timeendhour = DateFormat('kk').format(DateTime.parse(timeendhour));
-    
-        timehour = timeDisplayStart;
-        timehour = DateFormat('Hm').format(DateTime.parse(timehour));
-        
-        timehour1 = timeDisplayStart;
-        timehour1 = DateFormat('yMMMMd').format(DateTime.parse(timehour1));
-        
+    timeendhour = timeDisplayEnd;
+    timeendhour = DateFormat('kk').format(DateTime.parse(timeendhour));
+
+    timehour = timeDisplayStart;
+    timehour = DateFormat('Hm').format(DateTime.parse(timehour));
+
+    timehour1 = timeDisplayStart;
+    timehour1 = DateFormat('yMMMMd').format(DateTime.parse(timehour1));
 
     setState(() {});
   }
 
-  initdatabse() async {
+  initdatabase() async {
     var inisialisai = await DBProvider.db;
     inisialisai.initDB("tabelData");
     print("Init DB...");
@@ -1182,7 +839,6 @@ Widget timestampday (){
     await Future.delayed(const Duration(seconds: 2));
 
     setState(() {
-
       isLoading = false;
     });
   }
@@ -1209,7 +865,6 @@ Widget timestampday (){
 
     var queryResult = DBProvider.db.getAllEmployees(dataQuery, 0);
 
-
     return FutureBuilder(
       future: queryResult,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -1226,12 +881,15 @@ Widget timestampday (){
               ),
             ],
           );
+        } else if (snapshot.data.length == 0) {
+          return Container(
+            child: Text("No Data"),
+          );
         } else {
           List raw_data = new List();
           List phasaA = new List();
           List phasaB = new List();
           List phasaC = new List();
-
 
           for (int i = 0; i < snapshot.data.length; i++) {
             raw_data.add(snapshot.data[i].time_stamp.toString());
@@ -1245,21 +903,16 @@ Widget timestampday (){
               curr > next ? curr : next); //[0];//jsonDecode(phasaA).;
 
           if (phasaA != null) {
-
-          } else {
-
-          }
+          } else {}
 
           return Container(
             child: ListView.separated(
               separatorBuilder: (context, index) => Divider(
                 color: Colors.black,
               ),
-
               itemCount: titles.length,
               itemBuilder: (BuildContext context, int index) {
-
-                DateLimit = false;
+                dateLimit = false;
 
                 if (index == 0) {
                   data2 = phasaA;
@@ -1300,7 +953,7 @@ Widget timestampday (){
                               //     ),
                               title: Container(
                                 width: double.infinity,
-                                height: data_tinggi.toDouble(),
+                                height: dataTinggi.toDouble(),
                                 // mainAxisSize: MainAxisSize.max,
                                 // child: Column(
                                 //   children: <Widget>[
@@ -1308,7 +961,7 @@ Widget timestampday (){
                                 child: Echarts(option: '''
               {
                 animation:false,
-                height:'$data_tinggi',
+                height:'$dataTinggi',
               
                 grid: {
                         left: '0px',
@@ -1326,7 +979,7 @@ Widget timestampday (){
                 yAxis: {
                     type: 'value',
                     show: false,  
-                    max:$max_data,
+                    max:$maxData,
                     inverse:true
                    
                    
@@ -1373,16 +1026,6 @@ Widget timestampday (){
     print("per : " + status.toString());
   }
 
-  @override
-  void initState() {
-    Screen.keepOn(true);
-    _timerRoutine();
-
-    _CheckLastDB();
-
-    super.initState();
-  }
-
   _timerdetik() {
     Timer(Duration(seconds: 10), () async {
       setState(() {});
@@ -1420,10 +1063,11 @@ Widget timestampday (){
     String dateNow = dailyDate().toString();
 
     stateData = true;
-    changeDataPeriodic = 2;
+    // changeDataPeriodic = 2;
+    changeDataPeriodic = 0;
     String sevenData = datePeriodic(-7);
-    Qmulai = sevenData;
-    Qakhir = dateNow;
+    qMulai = sevenData;
+    qAkhir = dateNow;
     timeDisplayStart = sevenData;
     timeDisplayEnd = dateNow;
     dataQuery =
@@ -1471,16 +1115,13 @@ Widget timestampday (){
       var dataq = await loadlast(arrayDB[0]);
       if (dataq == null) {
         _getAllDB("5minutes");
-
       } else {
-
         changeDataPeriodic = 0;
         //  dataPeriodic
 
         changeQuery1("data1", "data2");
         setState(() {});
       }
-
     });
   }
 
@@ -1490,13 +1131,9 @@ Widget timestampday (){
       var dataq = await loadlast(arrayDB[1]);
       if (dataq == null) {
         _getAllDB("hourly");
-
-      } else {
-
-      }
+      } else {}
 
       timer = "daily";
-
     });
   }
 
@@ -1512,7 +1149,6 @@ Widget timestampday (){
           changeQuery1("data1", "data2");
         });
       } else {
-
         setState(() {});
       }
     });
@@ -1531,16 +1167,16 @@ Widget timestampday (){
       label2 = "dari : " + EmployeeApiProvider().getlengthdata().toString();
 
       var datadaily = await loadlast(arrayDB[2]);
-        var datamenit = await loadlast(arrayDB[0]);
-        var datajam = await loadlast(arrayDB[1]);
-        if (datamenit != null && datajam != null) {
-          _timergetDB();
-        }
-      //} 
+      var datamenit = await loadlast(arrayDB[0]);
+      var datajam = await loadlast(arrayDB[1]);
+      if (datamenit != null && datajam != null) {
+        _timergetDB();
+      }
+      //}
       else {
         EmployeeApiProvider()
             .getPartialdata(datadaily.toString(), newdate, "daily");
-            print("ambil daily data");
+        print("ambil daily data");
       }
 
       print("new date : " + newdate);
@@ -1583,10 +1219,7 @@ Widget timestampday (){
     if (differenceInminutes > 5) {
       EmployeeApiProvider()
           .getPartialdata(minuteslast.toString(), dateApi, "5minutes");
-
-    } else if (differenceInminutes < 2) {
-
-    }
+    } else if (differenceInminutes < 2) {}
     if (differenceInhourly > 70) {
       EmployeeApiProvider()
           .getPartialdata(hourlylast.toString(), dateApi, "hourly");
@@ -1599,9 +1232,72 @@ Widget timestampday (){
     print("===================== selisih =========================");
   }
 
+  List getDaysInBetween(DateTime startDate, DateTime endDate) {
+    List<DateTime> raw = [];
+    List days = [];
+    for (int i = 0; i <= endDate.difference(startDate).inDays; i++) {
+      // days.add(startDate.add(Duration(days: i)));
+      raw.add(startDate.add(Duration(days: i)));
+    }
+    raw.removeAt(0);
+    raw.removeLast();
+    print("RAW " + raw.toString());
+    int totalList = raw.length;
+    int halfList = (totalList / 2).round() - 1;
+    print("total list " + totalList.toString());
+    print("halfList " + halfList.toString());
+    if (raw.length == 0) {
+    } else if (raw.length == 1) {
+      days.add(DateFormat('dd').format(DateTime.parse(raw[0].toString())));
+    } else if (raw.length == 2) {
+      days.add(DateFormat('dd').format(DateTime.parse(raw[0].toString())));
+      days.add(DateFormat('dd').format(DateTime.parse(raw[1].toString())));
+    } else if (raw.length % 2 == 0) {
+      days.add(DateFormat('dd').format(DateTime.parse(
+          raw[((totalList / 2).round() - 1) - halfList].toString())));
+      days.add(DateFormat('dd').format(DateTime.parse(
+          raw[((totalList / 2).round() - 1) + halfList].toString())));
+    } else {
+      days.add(DateFormat('dd')
+          .format(DateTime.parse(raw[(totalList / 2).round() - 1].toString())));
+    }
+    return days;
+  }
+
+  List getHoursInBetween(DateTime startDate, DateTime endDate) {
+    print("dates : ${startDate} : ${endDate}");
+    List<DateTime> raw = [];
+    List days = [];
+    for (int i = 0; i <= endDate.difference(startDate).inHours; i++) {
+      raw.add(startDate.add(Duration(hours: i)));
+    }
+    raw.removeAt(0);
+    raw.removeLast();
+    print("RAW Hours " + raw.toString());
+    int totalList = raw.length;
+    int halfList = (totalList / 2).round() - 1;
+    print("total list " + totalList.toString());
+    print("halfList " + halfList.toString());
+    if (raw.length == 0) {
+    } else if (raw.length == 1) {
+      days.add(DateFormat('HH').format(DateTime.parse(raw[0].toString())));
+    } else if (raw.length == 2) {
+      days.add(DateFormat('HH').format(DateTime.parse(raw[0].toString())));
+      days.add(DateFormat('HH').format(DateTime.parse(raw[1].toString())));
+    } else if (raw.length % 2 == 0) {
+      days.add(DateFormat('HH').format(DateTime.parse(
+          raw[((totalList / 2).round() - 1) - halfList].toString())));
+      days.add(DateFormat('HH').format(DateTime.parse(
+          raw[((totalList / 2).round() - 1) + halfList].toString())));
+    } else {
+      days.add(DateFormat('HH')
+          .format(DateTime.parse(raw[(totalList / 2).round() - 1].toString())));
+    }
+    return days;
+  }
+
   _datechange(String formattedString) {
     var format = DateTime.parse(formattedString);
     DateTime dateTimeNow = DateTime.now();
-
   }
 }
