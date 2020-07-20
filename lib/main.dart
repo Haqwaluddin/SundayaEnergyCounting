@@ -43,7 +43,6 @@ class _tryScreenState extends State<tryScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _initDB();
   }

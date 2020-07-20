@@ -100,17 +100,14 @@ String timeDisplayStart,
     timestartweek,
     timestartweek1,
     timeendweek,
-    timeweekstart,
-    timeweekend,
+    timeweek,
     timestartday,
     timeendday,
-    timedaystart,
-    timedayend,
+    timeday,
     timestarthour,
     timeendhour,
     timehour,
-    timehourstart,
-    timehourend;
+    timehour1;
 
 List timeweeklist = [], timedaylist = [], timehourlist = [];
 
@@ -131,18 +128,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int count = 0;
   var isLoading = false;
   int a = 0;
 
   void tambah() {
     counter++;
-  }
-
-  void incrementCounter() {
-    setState(() {
-      count++;
-    });
   }
 
   void buildText(String logFile) {
@@ -245,7 +235,6 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
-                    // textScaleFactor: 1,
                   ),
                   Stack(
                     children: <Widget>[
@@ -264,15 +253,12 @@ class _HomePageState extends State<HomePage> {
 
   Widget buildTopbutton(String buttonText) {
     return FlatButton(
-      child: Text(
-        buttonText,
-        textScaleFactor: 1.0,
-        style: TextStyle(fontSize: 10.0, color: Colors.white),
-      ),
+      child: Text(buttonText,
+          textScaleFactor: 1.0,
+          style: TextStyle(fontSize: 10.0, color: Colors.white)),
       shape: RoundedRectangleBorder(
-        borderRadius: new BorderRadius.circular(10.0),
-        side: BorderSide(color: Colors.white),
-      ),
+          borderRadius: new BorderRadius.circular(10.0),
+          side: BorderSide(color: Colors.white)),
       onPressed: () async {
         String db = buttonText;
         if (buttonText == "minutes") {
@@ -348,9 +334,8 @@ class _HomePageState extends State<HomePage> {
                                 //addManualLeft = 0;
                                 addManualLeft--;
                                 if (addManualLeft < 1) addManualLeft = 1;
-                                (addManualLeft == 1)
-                                    ? stackHour = 3.0
-                                    : stackHour = (stackHour / 2);
+                                if (addManualLeft != 1)
+                                  stackHour = (stackHour / 2);
                                 changeQuery1("data1", "data2");
                                 // addManual = 0;
                               });
@@ -359,57 +344,57 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-                // Container(
-                //   // padding: EdgeInsets.all(10),
-                //   child: Column(
-                //     children: <Widget>[
-                //       Card(
-                //         child: IconButton(
-                //             icon: Icon(Icons.keyboard_arrow_up),
-                //             highlightColor: Colors.red,
-                //             onPressed: () {
-                //               // _checkMaxdb(arrayDB[changeDataPeriodic]);
-                //               changeDataPeriodic++;
-                //               if (changeDataPeriodic >
-                //                   dataPeriodic.length - 1) {
-                //                 changeDataPeriodic = dataPeriodic.length - 1;
-                //               }
-                //               print("changeDataPeriodic " +
-                //                   changeDataPeriodic.toString());
+                Container(
+                  // padding: EdgeInsets.all(10),
+                  child: Column(
+                    children: <Widget>[
+                      Card(
+                        child: IconButton(
+                            icon: Icon(Icons.keyboard_arrow_up),
+                            highlightColor: Colors.red,
+                            onPressed: () {
+                              // _checkMaxdb(arrayDB[changeDataPeriodic]);
+                              changeDataPeriodic++;
+                              if (changeDataPeriodic >
+                                  dataPeriodic.length - 1) {
+                                changeDataPeriodic = dataPeriodic.length - 1;
+                              }
+                              print("changeDataPeriodic " +
+                                  changeDataPeriodic.toString());
 
-                //               setState(() {
-                //                 changeQuery1("data1", "data2");
-                //               });
-                //             }),
-                //       ),
-                //       Text(
-                //         dataPeriodic[changeDataPeriodic],
-                //         style: GoogleFonts.openSans(
-                //           textStyle: TextStyle(
-                //             fontSize: 20,
-                //           ),
-                //         ),
-                //         textScaleFactor: 1,
-                //       ),
-                //       Card(
-                //         child: IconButton(
-                //             icon: Icon(Icons.keyboard_arrow_down),
-                //             highlightColor: Colors.red,
-                //             onPressed: () {
-                //               // _checkMaxdb(arrayDB[changeDataPeriodic]);
+                              setState(() {
+                                changeQuery1("data1", "data2");
+                              });
+                            }),
+                      ),
+                      Text(
+                        dataPeriodic[changeDataPeriodic],
+                        style: GoogleFonts.openSans(
+                          textStyle: TextStyle(
+                            fontSize: 20,
+                          ),
+                        ),
+                        textScaleFactor: 1,
+                      ),
+                      Card(
+                        child: IconButton(
+                            icon: Icon(Icons.keyboard_arrow_down),
+                            highlightColor: Colors.red,
+                            onPressed: () {
+                              // _checkMaxdb(arrayDB[changeDataPeriodic]);
 
-                //               changeDataPeriodic--;
-                //               if (changeDataPeriodic < 0) {
-                //                 changeDataPeriodic = 0;
-                //               }
-                //               setState(() {
-                //                 changeQuery1("data1", "data2");
-                //               });
-                //             }),
-                //       ),
-                //     ],
-                //   ),
-                // ),
+                              changeDataPeriodic--;
+                              if (changeDataPeriodic < 0) {
+                                changeDataPeriodic = 0;
+                              }
+                              setState(() {
+                                changeQuery1("data1", "data2");
+                              });
+                            }),
+                      ),
+                    ],
+                  ),
+                ),
                 Container(
                   // padding: EdgeInsets.all(15),
                   child: Card(
@@ -445,18 +430,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   changeQuery1(String data1, String data2) async {
-    var hourToDays = stackHour / 24;
-    if (stackHour < 24) {
-      changeDataPeriodic = 0;
-    } else if (hourToDays < 32) {
-      changeDataPeriodic = 1;
-    } else if (hourToDays < 512) {
-      changeDataPeriodic = 2;
-    } else if (hourToDays >= 512) {
-      changeDataPeriodic = 3;
-    } else {}
-    print("Stack Hour " + stackHour.toString());
-
     var dataq = await loadlast(arrayDB[changeDataPeriodic]);
     print("Last DB Query : " +
         dataq.toString() +
@@ -474,15 +447,13 @@ class _HomePageState extends State<HomePage> {
         var fiftyDaysFromNow;
         print("tempDate : " + tempDate.toString());
         if (changeDataPeriodic == 0) {
-          // fiftyDaysFromNow = tempDate.add(new Duration(hours: -addManualLeft));
-          fiftyDaysFromNow =
-              tempDate.add(new Duration(hours: -stackHour.round()));
+          fiftyDaysFromNow = tempDate.add(new Duration(hours: -addManualLeft));
         } else if (changeDataPeriodic == 1) {
           fiftyDaysFromNow =
-              tempDate.add(new Duration(hours: -stackHour.round()));
+              tempDate.add(new Duration(hours: -addManualLeft * 24));
         } else if (changeDataPeriodic == 2) {
           fiftyDaysFromNow =
-              tempDate.add(new Duration(days: -hourToDays.round()));
+              tempDate.add(new Duration(days: -addManualLeft * 7));
         } else if (changeDataPeriodic == 3) {
           // fiftyDaysFromNow
 
@@ -516,8 +487,8 @@ class _HomePageState extends State<HomePage> {
         // dataa = format.replaceAll("T24", "T00");
         // format = DateFormat('d').format(tempDate).toString();
 
-        print("start date " + data1);
-        print(" end date " + data2);
+        print(data1);
+        print(data2);
         // print(dataa);
 
         timeDisplayStart = data1;
@@ -537,34 +508,29 @@ class _HomePageState extends State<HomePage> {
         timeendweek = data2;
         timeendweek = DateFormat('dd').format(DateTime.parse(timeendweek));
 
-        timeweekstart = data1;
-        timeweekstart =
-            DateFormat('yMMM').format(DateTime.parse(timeweekstart));
-
-        timeweekend = data2;
-        timeweekend = DateFormat('yMMM').format(DateTime.parse(timeweekend));
+        timeweek = data1;
+        timeweek = DateFormat('yMMM').format(DateTime.parse(timeweek));
 
         timestartday = data1;
         timestartday = DateFormat('dd').format(DateTime.parse(timestartday));
         if (changeDataPeriodic == 1) {
           timedaylist =
               getDaysInBetween(DateTime.parse(data1), DateTime.parse(data2));
+          print("LIST day " + timedaylist.toString());
         }
 
         timeendday = data2;
         timeendday = DateFormat('dd').format(DateTime.parse(timeendday));
 
-        timedayend = data2;
-        timedayend = DateFormat('yMMM').format(DateTime.parse(timedayend));
-
-        timedaystart = data1;
-        timedaystart = DateFormat('yMMM').format(DateTime.parse(timedaystart));
+        timeday = data1;
+        timeday = DateFormat('yMMM').format(DateTime.parse(timeday));
 
         timestarthour = data1;
         timestarthour = DateFormat('kk').format(DateTime.parse(timestarthour));
         if (changeDataPeriodic == 0) {
           timehourlist =
               getHoursInBetween(DateTime.parse(data1), DateTime.parse(data2));
+          print("LIST Hours " + timehourlist.toString());
         }
 
         timeendhour = data2;
@@ -573,12 +539,8 @@ class _HomePageState extends State<HomePage> {
         timehour = data1;
         timehour = DateFormat('Hm').format(DateTime.parse(timehour));
 
-        timehourstart = data1;
-        timehourstart =
-            DateFormat('yMMMMd').format(DateTime.parse(timehourstart));
-
-        timehourend = data2;
-        timehourend = DateFormat('yMMMMd').format(DateTime.parse(timehourend));
+        timehour1 = data1;
+        timehour1 = DateFormat('yMMMMd').format(DateTime.parse(timehour1));
 
         DateTime endDate;
         if (changeDataPeriodic == 0) {
@@ -643,29 +605,14 @@ class _HomePageState extends State<HomePage> {
     String value;
 
     print("data periodic :  " + dataPeriodic[changeDataPeriodic].toString());
-    print(" timeDisplayStart " + timeDisplayStart);
-    print(" timeDisplayEnd " + timeDisplayEnd);
-
-    var hourToDays = stackHour / 24;
-    if (stackHour < 24) {
-      changeDataPeriodic = 0;
-    } else if (hourToDays < 32) {
-      changeDataPeriodic = 1;
-    } else if (hourToDays < 512) {
-      changeDataPeriodic = 2;
-    } else if (hourToDays >= 512) {
-      changeDataPeriodic = 3;
-    } else {}
 
     if (dataPeriodic[changeDataPeriodic].toString() == "Hour") {
       print("select hour");
 
       if (button == "left") {
-        value = minutecalculate(
-            (stackHour.round()), timeDisplayStart, timeDisplayEnd);
+        value = minutecalculate((1), timeDisplayStart, timeDisplayEnd);
       } else if (button == "right") {
-        value = minutecalculate(
-            (-stackHour.round()), timeDisplayStart, timeDisplayEnd);
+        value = minutecalculate((-1), timeDisplayStart, timeDisplayEnd);
       }
 
       db = "minutes";
@@ -674,33 +621,27 @@ class _HomePageState extends State<HomePage> {
     if (dataPeriodic[changeDataPeriodic].toString() == "Day") {
       print("select Day");
       if (button == "left") {
-        value = daycalculate(
-            (hourToDays.round()), timeDisplayStart, timeDisplayEnd);
+        value = daycalculate((1), timeDisplayStart, timeDisplayEnd);
       } else if (button == "right") {
-        value = daycalculate(
-            (-hourToDays.round()), timeDisplayStart, timeDisplayEnd);
+        value = daycalculate((-1), timeDisplayStart, timeDisplayEnd);
       }
       db = "hourly";
     }
 
     if (dataPeriodic[changeDataPeriodic].toString() == "Week") {
       if (button == "left") {
-        value =
-            daycalculate(hourToDays.round(), timeDisplayStart, timeDisplayEnd);
+        value = datecalculate(7, timeDisplayStart, timeDisplayEnd);
       } else if (button == "right") {
-        value =
-            daycalculate(-hourToDays.round(), timeDisplayStart, timeDisplayEnd);
+        value = datecalculate(-7, timeDisplayStart, timeDisplayEnd);
       }
       db = "daily";
     }
 
     if (dataPeriodic[changeDataPeriodic].toString() == "Month") {
       if (button == "left") {
-        value =
-            daycalculate(hourToDays.round(), timeDisplayStart, timeDisplayEnd);
+        value = monthcalculate(1, timeDisplayStart, timeDisplayEnd);
       } else if (button == "right") {
-        value =
-            daycalculate(-hourToDays.round(), timeDisplayStart, timeDisplayEnd);
+        value = monthcalculate(-1, timeDisplayStart, timeDisplayEnd);
       }
       db = "month";
     }
@@ -722,44 +663,27 @@ class _HomePageState extends State<HomePage> {
       dataQuery =
           'SELECT * FROM $db WHERE time_stamp BETWEEN "$start" AND "$end"';
     }
+
     timestartweek = timeDisplayStart;
     timestartweek = DateFormat('dd').format(DateTime.parse(timestartweek));
-    if (changeDataPeriodic == 2) {
-      timeweeklist = getDaysInBetween(
-          DateTime.parse(timeDisplayStart), DateTime.parse(timeDisplayEnd));
-    }
 
     timeendweek = timeDisplayEnd;
     timeendweek = DateFormat('dd').format(DateTime.parse(timeendweek));
 
-    timeweekstart = timeDisplayStart;
-    timeweekstart = DateFormat('yMMM').format(DateTime.parse(timeweekstart));
-
-    timeweekend = timeDisplayEnd;
-    timeweekend = DateFormat('yMMM').format(DateTime.parse(timeweekend));
+    timeweek = timeDisplayStart;
+    timeweek = DateFormat('yMMM').format(DateTime.parse(timeweek));
 
     timestartday = timeDisplayStart;
     timestartday = DateFormat('dd').format(DateTime.parse(timestartday));
-    if (changeDataPeriodic == 1) {
-      timedaylist = getDaysInBetween(
-          DateTime.parse(timeDisplayStart), DateTime.parse(timeDisplayEnd));
-    }
 
     timeendday = timeDisplayEnd;
     timeendday = DateFormat('dd').format(DateTime.parse(timeendday));
 
-    timedayend = timeDisplayEnd;
-    timedayend = DateFormat('yMMM').format(DateTime.parse(timedayend));
-
-    timedaystart = timeDisplayStart;
-    timedaystart = DateFormat('yMMM').format(DateTime.parse(timedaystart));
+    timeday = timeDisplayStart;
+    timeday = DateFormat('yMMM').format(DateTime.parse(timeday));
 
     timestarthour = timeDisplayStart;
     timestarthour = DateFormat('kk').format(DateTime.parse(timestarthour));
-    if (changeDataPeriodic == 0) {
-      timehourlist = getHoursInBetween(
-          DateTime.parse(timeDisplayStart), DateTime.parse(timeDisplayEnd));
-    }
 
     timeendhour = timeDisplayEnd;
     timeendhour = DateFormat('kk').format(DateTime.parse(timeendhour));
@@ -767,11 +691,8 @@ class _HomePageState extends State<HomePage> {
     timehour = timeDisplayStart;
     timehour = DateFormat('Hm').format(DateTime.parse(timehour));
 
-    timehourstart = timeDisplayStart;
-    timehourstart = DateFormat('yMMMMd').format(DateTime.parse(timehourstart));
-
-    timehourend = timeDisplayEnd;
-    timehourend = DateFormat('yMMMMd').format(DateTime.parse(timehourend));
+    timehour1 = timeDisplayStart;
+    timehour1 = DateFormat('yMMMMd').format(DateTime.parse(timehour1));
 
     setState(() {});
   }
@@ -1105,8 +1026,7 @@ class _HomePageState extends State<HomePage> {
     String dateNow = dailyDate().toString();
 
     stateData = true;
-    // changeDataPeriodic = 2;
-    changeDataPeriodic = 0;
+    changeDataPeriodic = 2;
     String sevenData = datePeriodic(-7);
     qMulai = sevenData;
     qAkhir = dateNow;

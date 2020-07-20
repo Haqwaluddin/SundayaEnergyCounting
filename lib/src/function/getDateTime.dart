@@ -1,4 +1,10 @@
 import 'package:intl/intl.dart';
+import 'package:date_format/date_format.dart';
+
+dateToStr(date) {
+  String format = DateFormat("yyyy-MM-dd HH:mm").format(DateTime.parse(date));
+  return format;
+}
 
 String dailyDate() {
   var today = new DateTime.now();
@@ -22,9 +28,9 @@ String dateAndHour() {
 }
 
 String minutecalculate(int dateCalculate, String start, String end) {
-
   String waktuEnd = DateFormat('yyyyMMddTHH0000').format(DateTime.parse(end));
-  String waktuStart = DateFormat('yyyyMMddTHH0000').format(DateTime.parse(start));
+  String waktuStart =
+      DateFormat('yyyyMMddTHH0000').format(DateTime.parse(start));
 
   var dataStart = DateTime.parse(waktuStart);
   var dataEnd = DateTime.parse(waktuEnd);
@@ -33,17 +39,17 @@ String minutecalculate(int dateCalculate, String start, String end) {
   print("waktu s : " + waktuStart);
   print("kalkulate : " + dateCalculate.toString());
 
-  var StartPeriodically = dataStart.add(new Duration(hours: -dateCalculate));
-  var EndPeriodically = dataEnd.add(new Duration(hours: -dateCalculate));
+  var startPeriodically = dataStart.add(new Duration(hours: -dateCalculate));
+  var endPeriodically = dataEnd.add(new Duration(hours: -dateCalculate));
 
-  return StartPeriodically.toString()
+  return startPeriodically.toString()
           .split(".")[0]
           .replaceAll(" ", "T")
           .replaceAll("-", "")
           .replaceAll(":", "")
           .toString() +
       " " +
-      EndPeriodically.toString()
+      endPeriodically.toString()
           .split(".")[0]
           .replaceAll(" ", "T")
           .replaceAll("-", "")
@@ -59,18 +65,17 @@ String daycalculate(int dateCalculate, String start, String end) {
 
   print("kalkulate : " + dateCalculate.toString());
 
-  var StartPeriodically = dataStart.add(new Duration(days: -dateCalculate));
-  var EndPeriodically = dataEnd.add(new Duration(days: -dateCalculate));
+  var startPeriodically = dataStart.add(new Duration(days: -dateCalculate));
+  var endPeriodically = dataEnd.add(new Duration(days: -dateCalculate));
 
-
-  return StartPeriodically.toString()
+  return startPeriodically.toString()
           .split(".")[0]
           .replaceAll(" ", "T")
           .replaceAll("-", "")
           .replaceAll(":", "")
           .toString() +
       " " +
-      EndPeriodically.toString()
+      endPeriodically.toString()
           .split(".")[0]
           .replaceAll(" ", "T")
           .replaceAll("-", "")
@@ -78,26 +83,52 @@ String daycalculate(int dateCalculate, String start, String end) {
           .toString();
 }
 
-
-
 String datecalculate(int dateCalculate, String start, String end) {
   var dataStart = DateTime.parse(start);
   var dataEnd = DateTime.parse(end);
 
-  var StartPeriodically = dataStart.add(new Duration(days: -dateCalculate));
-  var EndPeriodically = dataEnd.add(new Duration(days: -dateCalculate));
+  var startPeriodically = dataStart.add(new Duration(days: -dateCalculate));
+  var endPeriodically = dataEnd.add(new Duration(days: -dateCalculate));
 
-  return StartPeriodically.toString()
+  return startPeriodically.toString()
           .split(".")[0]
           .replaceAll(" ", "T")
           .replaceAll("-", "")
           .replaceAll(":", "")
           .toString() +
       " " +
-      EndPeriodically.toString()
+      endPeriodically.toString()
           .split(".")[0]
           .replaceAll(" ", "T")
           .replaceAll("-", "")
           .replaceAll(":", "")
           .toString();
+}
+
+String monthcalculate(int dateCalculate, String start, String end) {
+  var dataStart = DateTime.parse(start);
+  var dataEnd = DateTime.parse(end);
+
+  print("START : " + dataStart.toString());
+  print("END : " + dataEnd.toString());
+
+  var startPeriodically = DateTime(dataStart.year, dataStart.month -dateCalculate, dataStart.day);
+  var endPeriodically = DateTime(dataEnd.year, dataEnd.month -dateCalculate, dataEnd.day);
+
+  print("START PER : " + startPeriodically.toString());
+  print("END PER : " + endPeriodically.toString());
+
+  // return startPeriodically.toString()
+  //         .split(".")[0]
+  //         .replaceAll(" ", "T")
+  //         .replaceAll("-", "")
+  //         .replaceAll(":", "")
+  //         .toString() +
+  //     " " +
+  //     endPeriodically.toString()
+  //         .split(".")[0]
+  //         .replaceAll(" ", "T")
+  //         .replaceAll("-", "")
+  //         .replaceAll(":", "")
+  //         .toString();
 }
